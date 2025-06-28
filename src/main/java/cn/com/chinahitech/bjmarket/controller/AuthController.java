@@ -1,25 +1,43 @@
 package cn.com.chinahitech.bjmarket.controller;
+import cn.com.chinahitech.bjmarket.Service.StudentService;
+import cn.com.chinahitech.bjmarket.entity.Student;
 import cn.com.chinahitech.bjmarket.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class AuthController {
 
+    @Autowired
+    private StudentService studentService;
 
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        // 假设用户名密码校验成功（实际应查数据库）
-        if ("admin".equals(username) && "123456".equals(password)) {
-            return JwtUtil.generateToken(username); // 返回 token 给前端
+    public ResponseEntity<?> login(@RequestParam String studentId,
+                                   @RequestParam String password) {
+        try {
+            Student student = studentService.login(studentId, password);
+            String token = JwtUtil.generateToken(student.getStudentId());
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("token", token);
+            data.put("realName", student.getRealName());
+            data.put("avatarUrl", student.getAvatarUrl());
+            data.put("enrollmentYear", student.getEnrollmentYear());
+            data.put("grade", student.getGrade());
+            data.put("majorName", student.getMajorName());
+
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("error", e.getMessage()));
         }
-        return "Login failed";
-    }
-    @GetMapping("/hello")
-    public String hello(HttpServletRequest request) {
-        String user = (String) request.getAttribute("username");
-        return "Hello, " + user;
     }
 }
