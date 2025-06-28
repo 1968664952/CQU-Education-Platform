@@ -1,7 +1,7 @@
-package cn.com.chinahitech.bjmarket.controller;
-import cn.com.chinahitech.bjmarket.Service.StudentService;
+package cn.com.chinahitech.bjmarket.login.controller;
+import cn.com.chinahitech.bjmarket.login.Service.StudentService;
 import cn.com.chinahitech.bjmarket.common.Result;
-import cn.com.chinahitech.bjmarket.entity.Student;
+import cn.com.chinahitech.bjmarket.login.entity.Student;
 import cn.com.chinahitech.bjmarket.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +34,10 @@ public class AuthController {
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }
+    }
+    @RequestMapping(value="/sayHi")
+    public String sayHi(){
+        return "Hello World!";
     }
 }
 

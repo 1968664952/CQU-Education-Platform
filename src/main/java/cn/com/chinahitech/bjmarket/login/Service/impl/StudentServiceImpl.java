@@ -1,8 +1,8 @@
-package cn.com.chinahitech.bjmarket.Service.impl;
+package cn.com.chinahitech.bjmarket.login.Service.impl;
 
-import cn.com.chinahitech.bjmarket.Mapper.StudentMapper;
-import cn.com.chinahitech.bjmarket.Service.StudentService;
-import cn.com.chinahitech.bjmarket.entity.Student;
+import cn.com.chinahitech.bjmarket.login.Mapper.StudentMapper;
+import cn.com.chinahitech.bjmarket.login.Service.StudentService;
+import cn.com.chinahitech.bjmarket.login.entity.Student;
 import cn.com.chinahitech.bjmarket.utils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

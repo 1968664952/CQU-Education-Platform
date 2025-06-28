@@ -1,4 +1,4 @@
-package cn.com.chinahitech.bjmarket.controller;
+package cn.com.chinahitech.bjmarket.login.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,6 +1,6 @@
-package cn.com.chinahitech.bjmarket.Mapper;
+package cn.com.chinahitech.bjmarket.login.Mapper;
 
-import cn.com.chinahitech.bjmarket.entity.Student;
+import cn.com.chinahitech.bjmarket.login.entity.Student;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

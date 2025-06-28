@@ -1,4 +1,4 @@
-package cn.com.chinahitech.bjmarket.entity;
+package cn.com.chinahitech.bjmarket.login.entity;
 
 import lombok.Data;
 
