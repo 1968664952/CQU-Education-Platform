@@ -1,14 +1,10 @@
 package cn.com.chinahitech.bjmarket.controller;
 import cn.com.chinahitech.bjmarket.Service.StudentService;
+import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.entity.Student;
 import cn.com.chinahitech.bjmarket.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +16,8 @@ public class AuthController {
     private StudentService studentService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String studentId,
-                                   @RequestParam String password) {
+    public Result<?> login(@RequestParam String studentId,
+                           @RequestParam String password) {
         try {
             Student student = studentService.login(studentId, password);
             String token = JwtUtil.generateToken(student.getStudentId());
@@ -34,10 +30,10 @@ public class AuthController {
             data.put("grade", student.getGrade());
             data.put("majorName", student.getMajorName());
 
-            return ResponseEntity.ok(data);
+            return Result.success(data);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Collections.singletonMap("error", e.getMessage()));
+            return Result.error(e.getMessage());
         }
     }
 }
+
