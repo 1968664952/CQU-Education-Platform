@@ -39,6 +39,7 @@ public class AuthController {
             HttpSession session = request.getSession();
             //第二步：将想要保存到数据存入session中
             session.setAttribute("studentId",studentId);
+            session.setAttribute("majorName",student.getMajorName());
             //这样就完成了用户名和密码保存到session的操作
 
 
