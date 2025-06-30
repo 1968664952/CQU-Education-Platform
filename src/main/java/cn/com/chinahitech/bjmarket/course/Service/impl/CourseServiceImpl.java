@@ -26,4 +26,16 @@ public class CourseServiceImpl implements CourseService {
 
         return courseList;
     }
+
+    @Override
+    public List<Course> queryPGCourse() {
+        List<Course> courseList=null;
+        QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
+
+        wrapper.eq("c_bank_id","16");
+
+        courseList=courseMapper.selectList(wrapper);
+
+        return courseList;
+    }
 }

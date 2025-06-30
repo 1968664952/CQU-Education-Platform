@@ -44,6 +44,29 @@ public class CourseController {
         return JSON.toJSONString(result);
     }
 
+    @RequestMapping(value="/queryPGCourse",method = RequestMethod.GET)
+    public String queryPGCourse(){
+        List<Course> courseList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            courseList=courseService.queryPGCourse();
+            if(courseList.size()>0){
+                result.put("status","200");
+                result.put("msg","检索成功！");
+                result.put("data",courseList);
+            }else {
+                result.put("status","500");
+                result.put("msg","该课程不存在");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(result);
+    }
+
+
     @Autowired
     private CourserankService courserankService;
 
@@ -53,4 +76,4 @@ public class CourseController {
         return Result.success(courseList);
 }}
 
-//  http://localhost:8081/course/queryByKeyword
+//  http://localhost:8081/course/queryPGCourse
