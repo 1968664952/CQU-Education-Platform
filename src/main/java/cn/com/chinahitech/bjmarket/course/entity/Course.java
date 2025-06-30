@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Data
 public class Course {
     private Long courseId;
-    private Long courseBankId;
+    private Long cBankId;
     private String courseName;
     private String courseCode;
     private String title;

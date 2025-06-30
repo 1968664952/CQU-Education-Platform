@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class Course_ku {
+public class CourseKu {
     private Long cBankId;
     private String cBankName;
     private String description;
