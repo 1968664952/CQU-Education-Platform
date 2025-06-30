@@ -5,10 +5,14 @@ import cn.com.chinahitech.bjmarket.login.entity.Student;
 import cn.com.chinahitech.bjmarket.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class AuthController {
 
@@ -16,7 +20,8 @@ public class AuthController {
     private StudentService studentService;
 
     @PostMapping("/login")
-    public Result<?> login(@RequestParam String studentId,
+    public Result<?> login(HttpServletRequest request,
+                           @RequestParam String studentId,
                            @RequestParam String password) {
         try {
             Student student = studentService.login(studentId, password);
@@ -29,6 +34,13 @@ public class AuthController {
             data.put("enrollmentYear", student.getEnrollmentYear());
             data.put("grade", student.getGrade());
             data.put("majorName", student.getMajorName());
+
+            //第一步：获取session
+            HttpSession session = request.getSession();
+            //第二步：将想要保存到数据存入session中
+            session.setAttribute("studentId",studentId);
+            //这样就完成了用户名和密码保存到session的操作
+
 
             return Result.success(data);
         } catch (Exception e) {
