@@ -17,6 +17,7 @@
         <java.version>1.8</java.version>
     </properties>
 
+
     <!--项目的依赖 -->
     <dependencies>
         <!-- spring-boot-starter -->
@@ -91,6 +92,23 @@
             <artifactId>spring-boot-starter-freemarker</artifactId>
             <version>2.2.2.RELEASE</version>
         </dependency>
+
+        <!-- Knife4j 3.x 适用于 Spring Boot 2.x -->
+        <!-- OpenAPI UI 支持 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.14</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+
+
+
         <!-- JJWT 最新版本 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -167,6 +185,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
