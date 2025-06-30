@@ -1,10 +1,13 @@
 package cn.com.chinahitech.bjmarket.course.controller;
 
 import cn.com.chinahitech.bjmarket.common.Result;
+import cn.com.chinahitech.bjmarket.course.DTO.CID;
 import cn.com.chinahitech.bjmarket.course.DTO.CourseRequestDTO;
 import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
+import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.Service.CourseService;
 import cn.com.chinahitech.bjmarket.course.Service.CourserankService;
+import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +69,34 @@ public class CourseController {
         return JSON.toJSONString(result);
     }
 
+    //
+
+    @Autowired
+    private ChapterService chapterService;
+
+    @RequestMapping(value="/queryChapterById",method = RequestMethod.POST)
+    public String queryChapterById(@RequestBody CID cid){
+        List<Chapter> chapterList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            chapterList=chapterService.queryChapterById(cid.getCourse_id());
+            if(chapterList.size()>0){
+                result.put("status","200");
+                result.put("msg","检索成功！");
+                result.put("data",chapterList);
+            }else {
+                result.put("status","500");
+                result.put("msg","错误！未检索到");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(result);
+    }
+
+    //
 
     @Autowired
     private CourserankService courserankService;
@@ -76,4 +107,4 @@ public class CourseController {
         return Result.success(courseList);
 }}
 
-//  http://localhost:8081/course/queryPGCourse
+//  http://localhost:8081/course/queryChapterById

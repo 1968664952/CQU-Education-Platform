@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 @Data
 public class Chapter {
     private Long chapterId;
-    private Course course;
+    private Course courseId;
     private String title;
     private Integer position;
     private String url;

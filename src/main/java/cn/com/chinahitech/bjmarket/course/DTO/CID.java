@@ -3,6 +3,6 @@ package cn.com.chinahitech.bjmarket.course.DTO;
 import lombok.Data;
 
 @Data
-public class Keyword {
-    private String Keyword;
+public class CID {
+    private String course_id;
 }
