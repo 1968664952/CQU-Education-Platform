@@ -1,4 +1,5 @@
 package cn.com.chinahitech.bjmarket.login.controller;
+import cn.com.chinahitech.bjmarket.login.DTO.LoginRequest;
 import cn.com.chinahitech.bjmarket.login.Service.StudentService;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.login.entity.Student;
@@ -21,8 +22,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public Result<?> login(HttpServletRequest request,
-                           @RequestParam String studentId,
-                           @RequestParam String password) {
+                           @RequestBody LoginRequest loginRequest) {
+        String studentId = loginRequest.getStudentId();
+        String password = loginRequest.getPassword();
+
         try {
             Student student = studentService.login(studentId, password);
             String token = JwtUtil.generateToken(student.getStudentId());

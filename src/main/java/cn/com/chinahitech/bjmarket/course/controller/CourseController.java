@@ -1,7 +1,10 @@
 package cn.com.chinahitech.bjmarket.course.controller;
 
+import cn.com.chinahitech.bjmarket.common.Result;
+import cn.com.chinahitech.bjmarket.course.DTO.CourseRequestDTO;
 import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
 import cn.com.chinahitech.bjmarket.course.Service.CourseService;
+import cn.com.chinahitech.bjmarket.course.Service.CourserankService;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +44,13 @@ public class CourseController {
         return JSON.toJSONString(result);
     }
 
-}
+    @Autowired
+    private CourserankService courserankService;
+
+    @PostMapping("/rank")
+    public Result<List<Course>> getCourseRank(@RequestBody CourseRequestDTO dto) {
+        List<Course> courseList = courserankService.getTopCoursesByCourseBankId(dto.getCBankId(), dto.getLimit());
+        return Result.success(courseList);
+}}
+
 //  http://localhost:8081/course/queryByKeyword
