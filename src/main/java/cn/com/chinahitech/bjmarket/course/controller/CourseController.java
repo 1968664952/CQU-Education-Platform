@@ -7,8 +7,10 @@ import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
 import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.Service.CourseService;
 import cn.com.chinahitech.bjmarket.course.Service.CourserankService;
+import cn.com.chinahitech.bjmarket.course.Service.FavoriteService;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
+import cn.com.chinahitech.bjmarket.course.entity.Favorite;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -97,6 +99,35 @@ public class CourseController {
     }
 
     //
+    @Autowired
+    private FavoriteService favoriteService;
+    @Autowired
+    HttpServletRequest request;
+
+    @RequestMapping(value = "/addFavorite",method = RequestMethod.POST)
+    public String addFavorite(@RequestBody CID cid){
+        Map<String,Object> map =new HashMap<String,Object>();
+        Favorite favorite=new Favorite();
+        favorite.setCourseId(cid.getCourse_id());
+        favorite.setStudentId((String) request.getSession().getAttribute("studentId"));
+        try{
+            int result=favoriteService.addFavorite(favorite);
+            if(result==1){
+                map.put("status","200");
+                map.put("msg","收藏成功！");
+            }else {
+                map.put("status","500");
+                map.put("msg","收藏失败！");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            map.put("status","501");
+            map.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(map);
+    }
+
+    //
 
     @Autowired
     private CourserankService courserankService;
@@ -105,6 +136,7 @@ public class CourseController {
     public Result<List<Course>> getCourseRank(@RequestBody CourseRequestDTO dto) {
         List<Course> courseList = courserankService.getTopCoursesByCourseBankId(dto.getCBankId(), dto.getLimit());
         return Result.success(courseList);
-}}
+}
+}
 
-//  http://localhost:8081/course/queryChapterById
+//  http://localhost:8081/course/addFavorite
