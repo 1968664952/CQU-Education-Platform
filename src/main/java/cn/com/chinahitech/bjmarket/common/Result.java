@@ -18,8 +18,8 @@ public class Result<T> {
     }
 
     // 失败返回
-    public static <T> Result<T> error(String message) {
-        return new Result<>(500, message, null);
+    public static <T> Result<T> error(T data) {
+        return new Result<>(500, "操作失败", data);
     }
 
     // 自定义状态码与消息

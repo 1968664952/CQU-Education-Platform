@@ -1,23 +1,25 @@
 package cn.com.chinahitech.bjmarket.course.entity;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.sql.Timestamp;
 
 @Data
 public class Course {
-    private Long courseId;
-    private Long cBankId;
-    private String courseName;
-    private String courseCode;
-    private String title;
-    private String instructor;
-    private String category;
-    private String coverUrl;
-    private String description;
-    private String difficulty;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Integer totalPlayCount;
-    private Integer favoriteCount;
-    private Double compositeScore;
+    private Integer courseId;
+    private Integer cBankId;           // 课程库ID
+    private String courseName;         // 课程名称
+    private String courseCode;         // 课程代码
+    private String title;              // 课程标题
+    private String instructor;         // 课程讲师
+    private String category;           // 课程类别
+    private String coverUrl;           // 封面图URL
+    private String description;        // 课程描述
+    private Integer difficulty;        // 难度级别（1-5，1最简单）
+    private Timestamp createdAt;       // 创建时间
+    private Timestamp updatedAt;       // 更新时间
+    private Long totalPlayCount;       // 总播放量
+    private Integer favoriteCount;     // 收藏数
+    private Float compositeScore;      // 综合得分
+
 }

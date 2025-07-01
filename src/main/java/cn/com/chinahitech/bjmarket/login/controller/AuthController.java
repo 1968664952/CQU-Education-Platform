@@ -37,7 +37,7 @@ public class AuthController {
             data.put("enrollmentYear", student.getEnrollmentYear());
             data.put("grade", student.getGrade());
             data.put("majorName", student.getMajorName());
-
+            data.put("studentId", student.getStudentId());
             //第一步：获取session
             HttpSession session = request.getSession();
             //第二步：将想要保存到数据存入session中
