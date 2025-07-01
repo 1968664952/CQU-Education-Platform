@@ -136,6 +136,7 @@ public class CourseController {
     public Result<List<Course>> getCourseRank(@RequestBody CourseRequestDTO dto) {
         List<Course> courseList = courserankService.getTopCoursesByCourseBankId(dto.getCBankId(), dto.getLimit());
         return Result.success(courseList);
-}}
+}
+}
 
 //  http://localhost:8081/course/addFavorite

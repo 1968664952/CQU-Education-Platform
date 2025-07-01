@@ -168,7 +168,16 @@
             <version>2.7.0</version>
             <scope>test</scope>
         </dependency>
+
+        <!--pageHelper-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.6</version>
+        </dependency>
+
     </dependencies>
+
 
     <!-- maven构建，实现打jar包 -->
     <build>
