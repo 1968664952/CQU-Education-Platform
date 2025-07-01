@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.chinahitech.bjmarket.teaching_activities.mapper.TeachingActivitiesMapper">
+    <select id="showlist" resultType="cn.com.chinahitech.bjmarket.teaching_activities.entity.TeachingActivities">
+        select
+        activity_id,
+        title,
+        content,
+        organizer,
+        category,
+        activity_begin,
+        activity_end,
+        view_count
+        from teaching_activities
+        <where>
+            <if test="title != null">
+                title like concat('%', #{title}, '%')
+            </if>
+            <if test="organizer != null">
+                and organizer like concat('%', #{organizer}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>
