@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.chinahitech.bjmarket.information.gee_message.mapper.GeeMessageMapper">
+    <select id="showlist" resultType="cn.com.chinahitech.bjmarket.information.competition_message.entity.CompetitionMessage">
+        select
+        activity_id,
+        title,
+        content,
+        academy,
+        category,
+        attachment_link,
+        view_count
+        from competition_message
+        <where>
+            <if test="title != null">
+                title like concat('%', #{title}, '%')
+            </if>
+            <if test="organizer != null">
+                and academy like concat('%', #{organizer}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>
