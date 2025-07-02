@@ -99,6 +99,8 @@ public class CourseController {
     }
 
     //
+
+
     @Autowired
     private FavoriteService favoriteService;
     @Autowired
@@ -127,6 +129,48 @@ public class CourseController {
         return JSON.toJSONString(map);
     }
 
+    @RequestMapping(value="/queryFavoriteById",method = RequestMethod.POST)
+    public String queryFavoriteById(@RequestBody CID cid){
+        List<Favorite> favoriteList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            favoriteList=favoriteService.queryFavoriteById(cid.getCourse_id(),(String) request.getSession().getAttribute("studentId"));
+            if(favoriteList.size()==1){
+                result.put("status","200");
+                result.put("msg","已收藏");
+            }else {
+                result.put("status","500");
+                result.put("msg","未收藏");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value="/deleteFavorite",method = RequestMethod.POST)
+    public String deleteFavorite(@RequestBody CID cid){
+        List<Favorite> favoriteList =null;
+        Map<String,Object> map =new HashMap<String,Object>();
+        try{
+            int result=favoriteService.deleteFavorite(cid.getCourse_id(),(String) request.getSession().getAttribute("studentId"));
+            if(result==1){
+                map.put("status","200");
+                map.put("msg","删除成功！");
+            }else {
+                map.put("status","500");
+                map.put("msg","删除失败！");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            map.put("status","501");
+            map.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(map);
+    }
+
     //
 
     @Autowired
@@ -139,4 +183,4 @@ public class CourseController {
 }
 }
 
-//  http://localhost:8081/course/addFavorite
+//  http://localhost:8081/course/deleteFavorite
