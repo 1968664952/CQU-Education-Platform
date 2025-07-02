@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("cn.com.chinahitech.bjmarket.information.*.mapper")
+@MapperScan("cn.com.chinahitech.bjmarket.course_scores.mapper")
 @MapperScan("cn.com.chinahitech.bjmarket.login.Mapper")
 public class BjmarketApplication {
 
