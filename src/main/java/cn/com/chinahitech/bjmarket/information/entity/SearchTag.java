@@ -6,6 +6,6 @@ import lombok.Data;
 public class SearchTag {
     int pageNum;
     int pageSize;
-    String title="";
-    String organizer="";
+    String title;
+    String organizer;
 }

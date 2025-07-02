@@ -22,17 +22,20 @@ import java.util.List;
 public interface GeeMessageMapper extends BaseMapper<GeeMessage> {
     @Insert("insert into gee_message(title,content,academy,category,attachment_link,view_count)"+
             "values(#{title},#{content},#{academy},#{category},#{attachmentLink},#{viewCount})")
-    void add(GeeMessage new1);
+    int add(GeeMessage new1);
 
-    List<GeeMessage> showlist(String title, String publisher);
+    List<GeeMessage> showlist(String title, String organizer);
 
     @Update("update gee_message set title=#{title},content=#{content},academy=#{academy},category=#{category},attachment_link=#{attachmentLink} " +
             "where activity=#{activityId}")
-    void toupdate(GeeMessage gm);
+    int toupdate(GeeMessage gm);
 
     @Delete("DELETE from gee_message where activity_id=#{id}")
-    void todelete(MID id);
+    int todelete(MID id);
 
     @Select("select * from gee_message where activity_id=#{id}")
     GeeMessage findById(MID id);
+
+    @Update("UPDATE gee_message SET view_count = view_count + 1 WHERE activity_id = #{id}")
+    void incrementViews(MID id);
 }

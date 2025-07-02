@@ -35,4 +35,7 @@ public interface CompetitionMessageMapper extends BaseMapper<CompetitionMessage>
 
     @Select("select * from competition_message where competition_id=#{id}")
     CompetitionMessage findById(MID id);
+
+    @Update("UPDATE competition_message SET view_count = view_count + 1 WHERE competition_id = #{id}")
+    void incrementViews(MID id);
 }

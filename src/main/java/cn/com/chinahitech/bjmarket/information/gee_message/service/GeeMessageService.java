@@ -17,13 +17,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface GeeMessageService extends IService<GeeMessage> {
     //新增文章
-    void add(GeeMessage new1);
+    int add(GeeMessage new1);
     //分页列表查询
     PageBean<GeeMessage> getlist(SearchTag searchTag);
     //更新文章
-    void toupdate(GeeMessage cm);
+    int toupdate(GeeMessage cm);
     //删除文章
-    void delete(MID id);
+    int delete(MID id);
     //获取单个文章信息
     GeeMessage findById(MID id);
 }

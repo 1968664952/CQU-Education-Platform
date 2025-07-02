@@ -34,4 +34,7 @@ public interface TeachingActivitiesMapper extends BaseMapper<TeachingActivities>
 
     @Select("select * from teaching_activities where activity_id=#{id}")
     TeachingActivities findById(MID id);
+
+    @Update("UPDATE teaching_activities SET view_count = view_count + 1 WHERE activity_id = #{id}")
+    void incrementViews(MID id);
 }

@@ -17,13 +17,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AcademicJournalService extends IService<AcademicJournal> {
     //新增文章
-    void add(AcademicJournal new1);
+    int add(AcademicJournal new1);
     //分页列表查询
     PageBean<AcademicJournal> getlist(SearchTag searchTag);
     //更新文章
-    void toupdate(AcademicJournal journal);
+    int toupdate(AcademicJournal journal);
     //删除文章
-    void delete(MID id);
+    int delete(MID id);
     //获取单个文章信息
     AcademicJournal findById(MID id);
 }

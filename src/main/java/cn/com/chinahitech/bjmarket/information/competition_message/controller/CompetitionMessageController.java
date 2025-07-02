@@ -41,7 +41,7 @@ public class CompetitionMessageController {
     }
 
     @GetMapping("/detail")
-    public Result<CompetitionMessage> list(MID id){
+    public Result<CompetitionMessage> list(@RequestBody MID id){
         CompetitionMessage cm = competitionMessageService.findById(id);
         return Result.success(cm);
     }

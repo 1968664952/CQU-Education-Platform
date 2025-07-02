@@ -27,8 +27,13 @@ public class AcademicJournalController {
 
     @PostMapping("/post")
     public Result<?> add(@RequestBody AcademicJournal new1) {
-            academicJournalService.add(new1);
-            return Result.success(null);
+            int res=academicJournalService.add(new1);
+            if(res==0) {
+                return Result.error(null);
+            }
+            else {
+                return Result.success(null);
+            }
     }
 
     @GetMapping("/list")
@@ -40,19 +45,34 @@ public class AcademicJournalController {
     @GetMapping("/detail")
     public Result<AcademicJournal> list(@RequestBody MID id){
         AcademicJournal aj = academicJournalService.findById(id);
-        return Result.success(aj);
+        if(aj!=null) {
+            return Result.success(aj);
+        }
+        else  {
+            return Result.error(null);
+        }
     }
 
     @PutMapping("/update")
-    public Result<?> update(@RequestBody @Validated AcademicJournal journal){
-        academicJournalService.toupdate(journal);
-        return Result.success(null);
+    public Result<?> update(@RequestBody AcademicJournal journal){
+        int res = academicJournalService.toupdate(journal);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
     }
 
     @DeleteMapping("delete")
     public  Result<?> delete(@RequestBody MID id){
-        academicJournalService.delete(id);
-        return Result.success(null);
+        int res = academicJournalService.delete(id);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
     }
 
 }

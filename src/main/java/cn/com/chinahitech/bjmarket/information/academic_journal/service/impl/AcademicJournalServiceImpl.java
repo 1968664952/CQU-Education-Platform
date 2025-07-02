@@ -30,9 +30,11 @@ public class AcademicJournalServiceImpl extends ServiceImpl<AcademicJournalMappe
     private AcademicJournalMapper academicJournalMapper;
 
     @Override
-    public void add(@RequestBody AcademicJournal new1) {
+    public int add(@RequestBody AcademicJournal new1) {
         //补充属性值
-        academicJournalMapper.add(new1);
+        int res=academicJournalMapper.add(new1);
+
+        return res;
     }
 
     @Override
@@ -53,18 +55,21 @@ public class AcademicJournalServiceImpl extends ServiceImpl<AcademicJournalMappe
     }
 
     @Override
-    public void toupdate(AcademicJournal journal){
-        academicJournalMapper.toupdate(journal);
+    public int toupdate(AcademicJournal journal){
+        int res = academicJournalMapper.toupdate(journal);
+        return res;
     }
 
     @Override
-    public void delete(MID id){
-        academicJournalMapper.todelete(id);
+    public int delete(MID id){
+        int res = academicJournalMapper.todelete(id);
+        return res;
     }
 
     @Override
     public AcademicJournal findById(MID id){
         AcademicJournal aj = academicJournalMapper.findById(id);
+        academicJournalMapper.incrementViews(id);
         return aj;
     }
 }

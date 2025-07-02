@@ -29,9 +29,10 @@ public class GeeMessageServiceImpl extends ServiceImpl<GeeMessageMapper, GeeMess
     private GeeMessageMapper geeMessageMapper;
 
     @Override
-    public void add(@RequestBody GeeMessage new1) {
+    public int add(@RequestBody GeeMessage new1) {
         //补充属性值
-        geeMessageMapper.add(new1);
+        int res = geeMessageMapper.add(new1);
+        return res;
     }
 
     @Override
@@ -52,18 +53,21 @@ public class GeeMessageServiceImpl extends ServiceImpl<GeeMessageMapper, GeeMess
     }
 
     @Override
-    public void toupdate(GeeMessage gm){
-        geeMessageMapper.toupdate(gm);
+    public int toupdate(GeeMessage gm){
+        int res = geeMessageMapper.toupdate(gm);
+        return res;
     }
 
     @Override
-    public void delete(MID id){
-        geeMessageMapper.todelete(id);
+    public int delete(MID id){
+        int res = geeMessageMapper.todelete(id);
+        return res;
     }
 
     @Override
     public GeeMessage findById(MID id){
         GeeMessage gm = geeMessageMapper.findById(id);
+        geeMessageMapper.incrementViews(id);
         return gm;
     }
 }

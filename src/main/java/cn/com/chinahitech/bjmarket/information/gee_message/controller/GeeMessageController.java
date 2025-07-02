@@ -27,8 +27,13 @@ public class GeeMessageController {
 
     @PostMapping("/post")
     public Result<?> add(@RequestBody GeeMessage new1) {
-        geeMessageService.add(new1);
-        return Result.success(null);
+        int res = geeMessageService.add(new1);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
     }
 
     @GetMapping("/list")
@@ -38,20 +43,35 @@ public class GeeMessageController {
     }
 
     @GetMapping("/detail")
-    public Result<GeeMessage> list(MID id){
+    public Result<GeeMessage> list(@RequestBody MID id){
         GeeMessage cm = geeMessageService.findById(id);
-        return Result.success(cm);
+        if(cm!=null) {
+            return Result.success(cm);
+        }
+        else  {
+            return Result.error(null);
+        }
     }
 
     @PutMapping("/update")
-    public Result<?> update(@RequestBody @Validated GeeMessage activities){
-        geeMessageService.toupdate(activities);
-        return Result.success(null);
+    public Result<?> update(@RequestBody GeeMessage activities){
+        int res = geeMessageService.toupdate(activities);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
     }
 
     @DeleteMapping("delete")
     public  Result<?> delete(MID id){
-        geeMessageService.delete(id);
-        return Result.success(null);
+        int res = geeMessageService.delete(id);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
     }
 }

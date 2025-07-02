@@ -67,6 +67,7 @@ public class CompetitionMessageServiceImpl extends ServiceImpl<CompetitionMessag
     @Override
     public CompetitionMessage findById(MID id){
         CompetitionMessage cm = competitionMessageMapper.findById(id);
+        competitionMessageMapper.incrementViews(id);
         return cm;
     }
 }
