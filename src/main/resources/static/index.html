@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>视频播放</title>
+</head>
+<body>
+    <h2>通过 JS POST 请求播放视频</h2>
+    <video id="videoPlayer" width="640" height="360" controls></video>
+
+    <script>
+        async function fetchVideoBlob() {
+            try {
+                const response = await fetch("http://localhost:8081/video/play", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Range": "bytes=0-"
+                    },
+                    body: JSON.stringify({ fileName: "1.mp4" })
+                });
+
+                if (!response.ok) {
+                    console.error("视频加载失败，状态码:", response.status);
+                    return;
+                }
+
+                const blob = await response.blob();
+                const videoUrl = URL.createObjectURL(blob);
+                document.getElementById("videoPlayer").src = videoUrl;
+            } catch (error) {
+                console.error("发生异常:", error);
+            }
+        }
+
+        // 页面加载完成后调用
+        window.onload = fetchVideoBlob;
+    </script>
+</body>
+</html>

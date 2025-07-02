@@ -21,6 +21,10 @@ public class Result<T> {
     public static <T> Result<T> error(T data) {
         return new Result<>(500, "操作失败", data);
     }
+    // 失败返回（只传错误消息，无 data）
+    public static <T> Result<T> error(String message) {
+        return new Result<>(500, message, null);
+    }
 
     // 自定义状态码与消息
     public static <T> Result<T> build(Integer code, String message, T data) {
