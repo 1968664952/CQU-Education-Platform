@@ -28,6 +28,44 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Course> personalRecom1(List<String> courseName, int cBankId,int grade) {
+        List<Course> courseList=null;
+        QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
+
+        wrapper.eq("c_bank_id",cBankId)
+                .notIn("course_name",courseName)
+                .orderByDesc("difficulty")
+                .eq("grade",grade);
+        courseList=courseMapper.selectList(wrapper);
+        return courseList;
+    }
+    @Override
+    public List<Course> personalRecom2(int cBankId,int grade) {
+        List<Course> courseList=null;
+        QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
+        if(grade<4){
+            grade+=1;
+        }
+
+        wrapper.eq("c_bank_id",cBankId)
+                .orderByDesc("difficulty")
+                .eq("grade",grade);
+        courseList=courseMapper.selectList(wrapper);
+        return courseList;
+    }
+    @Override
+    public List<Course> personalRecom3(int cBankId) {
+        List<Course> courseList=null;
+        QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
+
+        wrapper.eq("c_bank_id",cBankId)
+                .orderByDesc("total_play_count");
+        courseList=courseMapper.selectList(wrapper);
+        return courseList;
+    }
+
+
+    @Override
     public List<Course> queryPGCourse() {
         List<Course> courseList=null;
         QueryWrapper<Course> wrapper=new QueryWrapper<Course>();

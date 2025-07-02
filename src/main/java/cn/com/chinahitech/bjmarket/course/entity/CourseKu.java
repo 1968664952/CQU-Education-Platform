@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class CourseKu {
-    private Long cBankId;
+    private Integer cBankId;
     private String cBankName;
     private String description;
     private String category;
