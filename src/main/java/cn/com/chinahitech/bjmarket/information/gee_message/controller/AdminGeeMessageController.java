@@ -3,12 +3,11 @@ package cn.com.chinahitech.bjmarket.information.gee_message.controller;
 
 import cn.com.chinahitech.bjmarket.PageBean;
 import cn.com.chinahitech.bjmarket.common.Result;
-import cn.com.chinahitech.bjmarket.information.gee_message.entity.GeeMessage;
-import cn.com.chinahitech.bjmarket.information.gee_message.service.GeeMessageService;
 import cn.com.chinahitech.bjmarket.information.entity.MID;
 import cn.com.chinahitech.bjmarket.information.entity.SearchTag;
+import cn.com.chinahitech.bjmarket.information.gee_message.entity.GeeMessage;
+import cn.com.chinahitech.bjmarket.information.gee_message.service.GeeMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,10 +19,21 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-07-01
  */
 @RestController
-@RequestMapping("/information/gee_message")
-public class GeeMessageController {
+@RequestMapping("/admin/gee_message")
+public class AdminGeeMessageController {
     @Autowired
     private GeeMessageService geeMessageService;
+
+    @PostMapping("/post")
+    public Result<?> add(@RequestBody GeeMessage new1) {
+        int res = geeMessageService.add(new1);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
+    }
 
     @GetMapping("/list")
     public Result<PageBean<GeeMessage>> list(@RequestBody SearchTag searchTag) {
@@ -42,4 +52,25 @@ public class GeeMessageController {
         }
     }
 
+    @PutMapping("/update")
+    public Result<?> update(@RequestBody GeeMessage activities){
+        int res = geeMessageService.toupdate(activities);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
+    }
+
+    @DeleteMapping("delete")
+    public  Result<?> delete(MID id){
+        int res = geeMessageService.delete(id);
+        if(res==0) {
+            return Result.error(null);
+        }
+        else {
+            return Result.success(null);
+        }
+    }
 }

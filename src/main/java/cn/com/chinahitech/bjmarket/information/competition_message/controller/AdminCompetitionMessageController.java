@@ -20,10 +20,16 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-07-01
  */
 @RestController
-@RequestMapping("/information/competition_message")
-public class CompetitionMessageController {
+@RequestMapping("/admin/competition_message")
+public class AdminCompetitionMessageController {
     @Autowired
     private CompetitionMessageService competitionMessageService;
+
+    @PostMapping("/post")
+    public Result<?> add(@RequestBody CompetitionMessage new1) {
+        competitionMessageService.add(new1);
+        return Result.success(null);
+    }
 
     @GetMapping("/list")
     public Result<PageBean<CompetitionMessage>> list(@RequestBody SearchTag searchTag) {
@@ -40,4 +46,15 @@ public class CompetitionMessageController {
         return Result.success(cm);
     }
 
+    @PutMapping("/update")
+    public Result<?> update(@RequestBody @Validated CompetitionMessage activities){
+        competitionMessageService.toupdate(activities);
+        return Result.success(null);
+    }
+
+    @DeleteMapping("delete")
+    public  Result<?> delete(MID id){
+        competitionMessageService.delete(id);
+        return Result.success(null);
+    }
 }
