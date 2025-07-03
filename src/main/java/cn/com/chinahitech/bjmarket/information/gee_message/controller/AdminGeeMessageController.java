@@ -44,7 +44,7 @@ public class AdminGeeMessageController {
 
     @GetMapping("/detail")
     public Result<GeeMessage> list(@RequestBody MID id){
-        GeeMessage cm = geeMessageService.findById(id);
+        GeeMessage cm = geeMessageService.findByIdAdmin(id);
         if(cm!=null) {
             return Result.success(cm);
         }

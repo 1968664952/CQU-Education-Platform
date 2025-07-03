@@ -25,6 +25,7 @@ public interface MyCourseScoresMapper extends BaseMapper<MyCourseScores> {
     List<Integer> findCourseScoresByStudentId(String studentId);
 
 
+
     @Select("SELECT COALESCE(SUM(course_credit), 0) " +
             "FROM course_scores " +
             "WHERE student_id = #{studentId}")

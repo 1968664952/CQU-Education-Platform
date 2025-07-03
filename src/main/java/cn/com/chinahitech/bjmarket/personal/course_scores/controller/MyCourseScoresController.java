@@ -3,6 +3,7 @@ package cn.com.chinahitech.bjmarket.personal.course_scores.controller;
 
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.GPAInfo;
 import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
 import cn.com.chinahitech.bjmarket.personal.course_scores.service.MyCourseScoresService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,22 @@ public class MyCourseScoresController {
     @Autowired
     private MyCourseScoresService myCourseScoresService;
 
-    @GetMapping("/{studentid}/getCourseScores")
+    @PostMapping("/{studentid}/getCourseScores")
     public Result<List<CourseScoreData>> getAll(@PathVariable String studentid){
         List<CourseScoreData> cs = myCourseScoresService.getAll(studentid);
         if(!cs.isEmpty()){
             return Result.success(cs);
+        }
+        else{
+            return  Result.error(null);
+        }
+    }
+
+    @PostMapping("/{studentId}")
+    public Result<GPAInfo> getStudentGPA(@PathVariable String studentId) {
+        GPAInfo gpa=myCourseScoresService.calculateGPA(studentId);
+        if(gpa!=null){
+            return Result.success(gpa);
         }
         else{
             return  Result.error(null);

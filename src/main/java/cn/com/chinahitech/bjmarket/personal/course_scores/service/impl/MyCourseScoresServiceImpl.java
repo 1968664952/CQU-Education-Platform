@@ -1,5 +1,8 @@
 package cn.com.chinahitech.bjmarket.personal.course_scores.service.impl;
 
+import cn.com.chinahitech.bjmarket.course.Mapper.CourseScoresMapper;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.GPAInfo;
 import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
 import cn.com.chinahitech.bjmarket.personal.course_scores.mapper.MyCourseScoresMapper;
 import cn.com.chinahitech.bjmarket.personal.course_scores.service.MyCourseScoresService;
@@ -8,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -23,9 +28,37 @@ public class MyCourseScoresServiceImpl extends ServiceImpl<MyCourseScoresMapper,
     private MyCourseScoresMapper myCourseScoresMapper;
 
     @Override
-    public  List<MyCourseScores> getAll(String studentid){
-        List<MyCourseScores> cs = myCourseScoresMapper.getAll(studentid);
+    public  List<CourseScoreData> getAll(String studentid){
+        List<CourseScoreData> cs = myCourseScoresMapper.getAll(studentid);
         return cs;
+    }
+
+    private double getGradePoint(int score) {
+        if (score >= 90) return 4.0;
+        if (score >= 60){
+            double GPA = (score/10)-5;
+        }
+        return 0.0;
+    }
+
+    @Override
+    public GPAInfo calculateGPA(String studentId) {
+        List<CourseScoreData> courses = myCourseScoresMapper.getAll(studentId);
+        if (courses == null || courses.isEmpty()) {
+            return new GPAInfo(studentId, 0.0);
+        }
+
+        double totalPoints = 0.0;
+        int totalCredits = 0;
+
+        for (CourseScoreData course : courses) {
+            double point = getGradePoint(course.getCourseScore());
+            totalPoints += point * course.getCourseCredit();
+            totalCredits += course.getCourseCredit();
+        }
+
+        double gpa = totalCredits > 0 ? totalPoints / totalCredits : 0.0;
+        return new GPAInfo(studentId, gpa);
     }
 
 

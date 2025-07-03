@@ -43,7 +43,7 @@ public class AdminCompetitionMessageController {
 
     @GetMapping("/detail")
     public Result<CompetitionMessage> list(@RequestBody MID id){
-        CompetitionMessage cm = competitionMessageService.findById(id);
+        CompetitionMessage cm = competitionMessageService.findByIdAdmin(id);
         return Result.success(cm);
     }
 

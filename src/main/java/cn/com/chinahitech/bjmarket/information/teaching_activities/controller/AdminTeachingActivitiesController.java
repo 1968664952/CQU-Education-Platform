@@ -40,7 +40,7 @@ public class AdminTeachingActivitiesController {
 
     @GetMapping("/detail")
     public Result<TeachingActivities> list(@RequestBody MID id){
-        TeachingActivities ta = teachingActivitiesService.findById(id);
+        TeachingActivities ta = teachingActivitiesService.findByIdAdmin(id);
         return Result.success(ta);
     }
 

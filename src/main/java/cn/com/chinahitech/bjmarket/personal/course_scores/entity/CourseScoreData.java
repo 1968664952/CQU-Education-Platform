@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class CourseScoreData {
     String courseName;
-    String courseScore;
-    String courseId;
+    int courseScore;
+    int courseCredit;
 }

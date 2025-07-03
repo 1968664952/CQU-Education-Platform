@@ -26,4 +26,5 @@ public interface CompetitionMessageService extends IService<CompetitionMessage> 
     void delete(MID id);
     //获取单个文章信息
     CompetitionMessage findById(MID id);
+    CompetitionMessage findByIdAdmin(MID id);
 }
