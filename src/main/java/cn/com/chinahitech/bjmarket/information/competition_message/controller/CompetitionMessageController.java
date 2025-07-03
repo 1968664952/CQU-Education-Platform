@@ -26,7 +26,7 @@ public class CompetitionMessageController {
     @Autowired
     private CompetitionMessageService competitionMessageService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Result<PageBean<CompetitionMessage>> list(@RequestBody SearchTag searchTag) {
         PageBean<CompetitionMessage> pb =competitionMessageService.getlist(searchTag);
         if(pb==null){
@@ -35,7 +35,7 @@ public class CompetitionMessageController {
         return Result.success(pb);
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     public Result<CompetitionMessage> list(@RequestBody MID id){
         CompetitionMessage cm = competitionMessageService.findById(id);
         return Result.success(cm);

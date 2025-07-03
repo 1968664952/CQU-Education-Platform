@@ -36,13 +36,13 @@ public class AdminGeeMessageController {
         }
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Result<PageBean<GeeMessage>> list(@RequestBody SearchTag searchTag) {
         PageBean<GeeMessage> pb = geeMessageService.getlist(searchTag);
         return Result.success(pb);
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     public Result<GeeMessage> list(@RequestBody MID id){
         GeeMessage cm = geeMessageService.findById(id);
         if(cm!=null) {
