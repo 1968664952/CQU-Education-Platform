@@ -4,10 +4,7 @@ import cn.com.chinahitech.bjmarket.information.academic_journal.entity.AcademicJ
 import cn.com.chinahitech.bjmarket.information.entity.MID;
 import cn.com.chinahitech.bjmarket.information.gee_message.entity.GeeMessage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,6 +16,7 @@ import java.util.List;
  * @author zhufu
  * @since 2025-07-01
  */
+@Mapper
 public interface GeeMessageMapper extends BaseMapper<GeeMessage> {
     @Insert("insert into gee_message(title,content,academy,category,attachment_link,view_count)"+
             "values(#{title},#{content},#{academy},#{category},#{attachmentLink},#{viewCount})")

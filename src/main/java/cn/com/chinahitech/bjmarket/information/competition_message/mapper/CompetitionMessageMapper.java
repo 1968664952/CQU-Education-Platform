@@ -4,10 +4,7 @@ import cn.com.chinahitech.bjmarket.information.academic_journal.entity.AcademicJ
 import cn.com.chinahitech.bjmarket.information.competition_message.entity.CompetitionMessage;
 import cn.com.chinahitech.bjmarket.information.entity.MID;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,6 +16,7 @@ import java.util.List;
  * @author zhufu
  * @since 2025-07-01
  */
+@Mapper
 public interface CompetitionMessageMapper extends BaseMapper<CompetitionMessage> {
     @Insert("insert into competition_message(title,content,organizer,category,signup_open,signup_end,competition_date,signup_link,attachment_link,view_count)"+
             "values(#{title},#{content},#{organizer},#{category},#{signupOpen},#{signupEnd},#{competitionDate},#{attachmentLink},#{viewCount})")

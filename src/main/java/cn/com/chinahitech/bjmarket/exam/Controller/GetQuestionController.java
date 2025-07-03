@@ -1,6 +1,7 @@
 package cn.com.chinahitech.bjmarket.exam.Controller;
 import cn.com.chinahitech.bjmarket.common.Result;
 
+import cn.com.chinahitech.bjmarket.exam.DTO.AllQuestionsResponseDTO;
 import cn.com.chinahitech.bjmarket.exam.DTO.PaperRequestDTO;
 import cn.com.chinahitech.bjmarket.exam.Entity.QuestionBlank;
 import cn.com.chinahitech.bjmarket.exam.Entity.QuestionSelect;
@@ -20,25 +21,29 @@ public class GetQuestionController {
     @Autowired
     private GetQuestionMapper getquestionMapper;
 
-    @PostMapping("/blank")
-    public Result<List<QuestionBlank>> getQuestionBlank(@RequestBody PaperRequestDTO request) {
-        List<QuestionBlank> questions = getquestionMapper.getQuestionBlank(request.getPaperId());
-        return Result.success(questions);
+    @PostMapping("/question")
+    public Result<AllQuestionsResponseDTO> getAllQuestions(@RequestBody PaperRequestDTO request) {
+        try {
+            AllQuestionsResponseDTO dto = new AllQuestionsResponseDTO();
+            dto.setBlank(getquestionMapper.getQuestionBlank(request.getPaperId()));
+            dto.setSelect(getquestionMapper.getQuestionSelect(request.getPaperId()));
+            dto.setShortanswer(getquestionMapper.getQuestionShortAnswer(request.getPaperId()));
+            dto.setTf(getquestionMapper.getQuestionTF(request.getPaperId()));
+
+            // 如果全部为空，也返回提示
+            if ((dto.getBlank() == null || dto.getBlank().isEmpty()) &&
+                    (dto.getSelect() == null || dto.getSelect().isEmpty()) &&
+                    (dto.getShortanswer() == null || dto.getShortanswer().isEmpty()) &&
+                    (dto.getTf() == null || dto.getTf().isEmpty())) {
+                return Result.error("所有题型均为空");
+            }
+
+            return Result.success(dto);
+        } catch (Exception e) {
+            return Result.error("查询所有题型失败：" + e.getMessage());
+        }
     }
-    @PostMapping("/select")
-    public Result<List<QuestionSelect>> getQuestionSelect(@RequestBody PaperRequestDTO request) {
-        List<QuestionSelect> questions = getquestionMapper.getQuestionSelect(request.getPaperId());
-        return Result.success(questions);
-    }
-    @PostMapping("/shortanswer")
-    public Result<List<QuestionShortAnswer>> getQuestionShortAnswer(@RequestBody PaperRequestDTO request) {
-        List<QuestionShortAnswer> questions = getquestionMapper.getQuestionShortAnswer(request.getPaperId());
-        return Result.success(questions);
-    }
-    @PostMapping("/tf")
-    public Result<List<QuestionTF>> getQuestionTF(@RequestBody PaperRequestDTO request) {
-        List<QuestionTF> questions = getquestionMapper.getQuestionTF(request.getPaperId());
-        return Result.success(questions);
-    }
+
+
 
 }

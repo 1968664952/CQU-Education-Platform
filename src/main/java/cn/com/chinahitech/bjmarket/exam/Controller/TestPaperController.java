@@ -12,15 +12,23 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/exam/paper")
+@RequestMapping("/exam")
 public class TestPaperController {
 
     @Autowired
     private TestPaperMapper testPaperMapper;
 
-    @PostMapping("/byQBankId")
+    @PostMapping("/paper")
     public Result<List<TestPaper>> getByQBankId(@RequestBody QBankRequestDTO request) {
-        List<TestPaper> papers = testPaperMapper.getByQBankId(request.getQBankId());
-        return Result.success(papers);
+        try {
+            List<TestPaper> papers = testPaperMapper.getByQBankId(request.getQBankId());
+            if (papers == null || papers.isEmpty()) {
+                return Result.error("该题库下无试卷");
+            }
+            return Result.success(papers);
+        } catch (Exception e) {
+            return Result.error("查询试卷失败：" + e.getMessage());
+        }
     }
+
 }

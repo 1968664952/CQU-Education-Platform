@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-06-30
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/information/academic_journal")
 public class AcademicJournalController {
     @Autowired

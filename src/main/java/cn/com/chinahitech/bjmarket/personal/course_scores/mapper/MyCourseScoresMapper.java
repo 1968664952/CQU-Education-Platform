@@ -1,5 +1,6 @@
 package cn.com.chinahitech.bjmarket.personal.course_scores.mapper;
 
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
 import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,17 @@ import java.util.List;
  */
 @Mapper
 public interface MyCourseScoresMapper extends BaseMapper<MyCourseScores> {
-    @Select("select * from course_scores where student_id=#{studentid}")
-    List<MyCourseScores> getAll(String studentid);
+    @Select("select course_name, course_score, course_credit from course_scores where student_id=#{studentid}")
+    List<CourseScoreData> getAll(String studentid);
+
+    @Select("SELECT course_score FROM course_scores WHERE student_id = #{studentId}")
+    List<Integer> findCourseScoresByStudentId(String studentId);
+
+
+    @Select("SELECT COALESCE(SUM(course_credit), 0) " +
+            "FROM course_scores " +
+            "WHERE student_id = #{studentId}")
+    int getTotalCreditsByStudentId(String studentId);
+
+
 }
