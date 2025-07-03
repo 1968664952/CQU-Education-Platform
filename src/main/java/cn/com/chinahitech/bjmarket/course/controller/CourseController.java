@@ -77,21 +77,26 @@ public class CourseController {
                 result.put("status","501");
                 result.put("msg","异常："+ex.getMessage());
             }
-        }else {
-
-            String studentId=(String) request.getSession().getAttribute("studentId");
-            try{
-                courseScoresList=courseScoreService.queryLearnedCourse(studentId);
-                List<String> courseNames = courseScoresList.stream()
-                        .map(CourseScores::getCourseName)
-                        .collect(Collectors.toList());
-                courseList=courseService.personalRecom1(courseNames,cBankId,grade);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                result.put("status","501");
-                result.put("msg","异常："+ex.getMessage());
-            }
         }
+
+        String studentId=(String) request.getSession().getAttribute("studentId");
+        try{
+            courseScoresList=courseScoreService.queryLearnedCourse(studentId);
+            List<String> courseNames = courseScoresList.stream()
+                    .map(CourseScores::getCourseName)
+                    .collect(Collectors.toList());
+            courseList0=courseService.personalRecom1(courseNames,cBankId,grade);
+            courseList.addAll(courseList0);
+            if (courseList.size()>10){
+                courseList.subList(10, courseList.size()).clear();
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+
         int size=courseList.size();
         if (size<10){
             try {
@@ -99,7 +104,8 @@ public class CourseController {
                 courseList.addAll(courseList0);
                 size=courseList.size();
                 if (size>10){
-                    courseList.subList(0,10);
+                    courseList.subList(10, courseList.size()).clear();
+                    System.out.println(courseList.size());
                 }
                 else if (size<10){
                     courseList0=courseService.personalRecom3(cBankId);
@@ -114,7 +120,7 @@ public class CourseController {
                 result.put("msg","异常："+ex.getMessage());
             }
         }else if (size>10){
-            courseList=courseList.subList(0,10);
+            courseList.subList(10, courseList.size()).clear();
         }
         result.put("status","200");
         result.put("msg","检索成功！");
