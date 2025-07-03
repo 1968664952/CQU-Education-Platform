@@ -17,8 +17,6 @@ public class CourseManagementServiceImpl implements CourseManagementService {
 
     @Override
     public int addCourse(Course course) {
-        course.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        course.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return courseManagementMapper.insertCourse(course);
     }
 

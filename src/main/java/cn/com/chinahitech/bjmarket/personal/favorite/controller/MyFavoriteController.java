@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-07-02
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/personal_feild")
 public class MyFavoriteController {
     @Autowired
     private MyFavoriteService myFavoriteService;
 
-    @GetMapping("/{studentid}/favoriteCourses")
+    @PostMapping("/{studentid}/favoriteCourses")
     public Result<PageBean<Course>> getFavoriteCourses(
             @PathVariable String studentid,
             @RequestParam(defaultValue = "1") int page,
@@ -40,6 +41,11 @@ public class MyFavoriteController {
         PageBean<Course> res = myFavoriteService.getFavoriteCoursesPage(studentid, page, size);
 
         // 返回成功响应
-        return Result.success(res);
+        if(res!=null) {
+            return Result.success(res);
+        }
+        else{
+            return Result.error(null);
+        }
     }
 }

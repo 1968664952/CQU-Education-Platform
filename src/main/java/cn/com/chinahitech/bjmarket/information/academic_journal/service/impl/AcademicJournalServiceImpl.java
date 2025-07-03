@@ -76,7 +76,6 @@ public class AcademicJournalServiceImpl extends ServiceImpl<AcademicJournalMappe
     @Override
     public AcademicJournal findByIdAdmin(MID id){
         AcademicJournal aj = academicJournalMapper.findById(id);
-        academicJournalMapper.incrementViews(id);
         return aj;
     }
 }

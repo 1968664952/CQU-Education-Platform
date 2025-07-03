@@ -70,4 +70,10 @@ public class GeeMessageServiceImpl extends ServiceImpl<GeeMessageMapper, GeeMess
         geeMessageMapper.incrementViews(id);
         return gm;
     }
+
+    @Override
+    public GeeMessage findByIdAdmin(MID id){
+        GeeMessage gm = geeMessageMapper.findById(id);
+        return gm;
+    }
 }

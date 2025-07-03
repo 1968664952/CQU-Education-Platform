@@ -26,4 +26,5 @@ public interface GeeMessageService extends IService<GeeMessage> {
     int delete(MID id);
     //获取单个文章信息
     GeeMessage findById(MID id);
+    GeeMessage findByIdAdmin(MID id);
 }

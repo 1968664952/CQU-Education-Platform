@@ -3,6 +3,7 @@ package cn.com.chinahitech.bjmarket.course.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -24,5 +25,5 @@ public class Course {
     private Long totalPlayCount;       // 总播放量
     private Integer favoriteCount;     // 收藏数
     private Float compositeScore;      // 综合得分
-
+    private Integer grade;
 }
