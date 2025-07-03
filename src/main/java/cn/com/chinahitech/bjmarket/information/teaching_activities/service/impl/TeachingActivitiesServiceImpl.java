@@ -67,4 +67,10 @@ public class TeachingActivitiesServiceImpl extends ServiceImpl<TeachingActivitie
         teachingActivitiesMapper.incrementViews(id);
         return ta;
     }
+
+    @Override
+    public TeachingActivities findByIdAdmin(MID id){
+        TeachingActivities ta = teachingActivitiesMapper.findById(id);
+        return ta;
+    }
 }

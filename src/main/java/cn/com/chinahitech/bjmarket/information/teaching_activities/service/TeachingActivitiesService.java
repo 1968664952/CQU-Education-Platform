@@ -25,4 +25,5 @@ public interface TeachingActivitiesService extends IService<TeachingActivities> 
     void delete(MID id);
     //获取单个文章信息
     TeachingActivities findById(MID id);
+    TeachingActivities findByIdAdmin(MID id);
 }
