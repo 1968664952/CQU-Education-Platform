@@ -1,8 +1,9 @@
-package cn.com.chinahitech.bjmarket.personal.course_scores.entity;
+package cn.com.chinahitech.bjmarket.personal.favorite.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 学生选课得分表
+ * 课程收藏表
  * </p>
  *
  * @author zhufu
@@ -19,41 +20,31 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("course_scores")
-public class CourseScores implements Serializable {
+@TableName("favorite")
+public class MyFavorite implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 得分ID
+     * 收藏ID
      */
-    @TableId(value = "score_id", type = IdType.AUTO)
-    private Integer scoreId;
+    @TableId(value = "favorite_id", type = IdType.AUTO)
+    private Integer favoriteId;
 
     /**
-     * 学生学号
+     * 学生ID
      */
     private String studentId;
 
     /**
-     * 选课名称
+     * 课程ID
      */
-    private String courseName;
+    private Integer courseId;
 
     /**
-     * 选课得分
+     * 收藏时间
      */
-    private Integer courseScore;
-
-    /**
-     * 选课学分
-     */
-    private Integer courseCredit;
-
-    /**
-     * 选课类别
-     */
-    private String category;
+    private LocalDateTime createdAt;
 
 
 }

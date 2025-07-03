@@ -2,9 +2,8 @@ package cn.com.chinahitech.bjmarket.personal.course_scores.controller;
 
 
 import cn.com.chinahitech.bjmarket.common.Result;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScores;
-import cn.com.chinahitech.bjmarket.personal.course_scores.service.CourseScoresService;
-import cn.com.chinahitech.bjmarket.information.entity.MID;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
+import cn.com.chinahitech.bjmarket.personal.course_scores.service.MyCourseScoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +19,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/personal_feild")
-public class CourseScoresController {
+public class MyCourseScoresController {
     @Autowired
-    private CourseScoresService courseScoresService;
+    private MyCourseScoresService myCourseScoresService;
 
-    @GetMapping("/{student}/getCourseScores")
-    public Result<List<CourseScores>> getAll(@PathVariable String studentid){
-        List<CourseScores> cs = courseScoresService.getAll(studentid);
+    @GetMapping("/{studentid}/getCourseScores")
+    public Result<List<MyCourseScores>> getAll(@PathVariable String studentid){
+        List<MyCourseScores> cs = myCourseScoresService.getAll(studentid);
         if(!cs.isEmpty()){
             return Result.success(cs);
         }
