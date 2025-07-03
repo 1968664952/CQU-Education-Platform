@@ -1,11 +1,14 @@
 package cn.com.chinahitech.bjmarket.course.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
 public class Course {
+    @TableId(value = "course_id", type = IdType.AUTO)
     private Integer courseId;
     private Integer cBankId;           // 课程库ID
     private String courseName;         // 课程名称

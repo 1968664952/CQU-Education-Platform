@@ -187,7 +187,8 @@ public class CourseController {
         favorite.setStudentId((String) request.getSession().getAttribute("studentId"));
         try{
             int result=favoriteService.addFavorite(favorite);
-            if(result==1){
+            int f=courseService.addFavoriteCount(cid.getCourse_id());
+            if(result==1&&f==1){
                 map.put("status","200");
                 map.put("msg","收藏成功！");
             }else {
@@ -229,7 +230,8 @@ public class CourseController {
         Map<String,Object> map =new HashMap<String,Object>();
         try{
             int result=favoriteService.deleteFavorite(cid.getCourse_id(),(String) request.getSession().getAttribute("studentId"));
-            if(result==1){
+            int f=courseService.delFavoriteCount(cid.getCourse_id());
+            if(result==1&&f==1){
                 map.put("status","200");
                 map.put("msg","删除成功！");
             }else {

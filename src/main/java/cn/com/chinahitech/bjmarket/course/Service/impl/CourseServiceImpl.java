@@ -4,6 +4,7 @@ import cn.com.chinahitech.bjmarket.course.Mapper.CourseMapper;
 import cn.com.chinahitech.bjmarket.course.Service.CourseService;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,5 +76,23 @@ public class CourseServiceImpl implements CourseService {
         courseList=courseMapper.selectList(wrapper);
 
         return courseList;
+    }
+
+    @Override
+    public int addFavoriteCount(String courseId) {
+        UpdateWrapper<Course> wrapper = new UpdateWrapper<Course>();
+        wrapper.setSql("favorite_count = favorite_count + 1")  // 直接拼接 SQL 表达式
+                .eq("course_id", courseId);
+        int result=courseMapper.update(null,wrapper);
+        return result;
+    }
+
+    @Override
+    public int delFavoriteCount(String courseId) {
+        UpdateWrapper<Course> wrapper = new UpdateWrapper<Course>();
+        wrapper.setSql("favorite_count = favorite_count - 1")  // 直接拼接 SQL 表达式
+                .eq("course_id", courseId);
+        int result=courseMapper.update(null,wrapper);
+        return result;
     }
 }
