@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Delete;
 @Mapper
 public interface CourseManagementMapper {
 
-    @Insert("INSERT INTO course (c_bank_id, course_name, course_code, title, instructor, category, cover_url, description, difficulty, created_at, updated_at, total_play_count, favorite_count, composite_score) " +
-            "VALUES (#{cBankId}, #{courseName}, #{courseCode}, #{title}, #{instructor}, #{category}, #{coverUrl}, #{description}, #{difficulty}, #{createdAt}, #{updatedAt}, #{totalPlayCount}, #{favoriteCount}, #{compositeScore})")
+    @Insert("INSERT INTO course (c_bank_id, course_name, course_code, title, instructor, category, cover_url, description, difficulty, total_play_count, favorite_count, composite_score, grade) " +
+            "VALUES (#{cBankId}, #{courseName}, #{courseCode}, #{title}, #{instructor}, #{category}, #{coverUrl}, #{description}, #{difficulty}, #{totalPlayCount}, #{favoriteCount}, #{compositeScore}, #{grade})")
     int insertCourse(Course course);
 
 
