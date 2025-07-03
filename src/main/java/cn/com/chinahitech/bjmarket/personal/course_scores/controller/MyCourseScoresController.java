@@ -38,7 +38,7 @@ public class MyCourseScoresController {
     @PostMapping("/{studentId}/getGPA")
     public Result<GPAInfo> getStudentGPA(@PathVariable String studentId) {
         GPAInfo gpa=myCourseScoresService.calculateGPA(studentId);
-        if(gpa!=null){
+        if(gpa.getGpa()!=0.0){
             return Result.success(gpa);
         }
         else{
@@ -60,7 +60,7 @@ public class MyCourseScoresController {
     @PostMapping("/{studentId}/getCourseCount")
     public Result<CourseCount> getStudentCourseCount(@PathVariable String studentId) {
         CourseCount cc = myCourseScoresService.getCourseCounts(studentId);
-        if(cc!=null){
+        if(cc.getEcount()!=0.0&&cc.getEcount()!=0.0){
             return Result.success(cc);
         }
         else{

@@ -41,6 +41,11 @@ public class MyFavoriteController {
         PageBean<Course> res = myFavoriteService.getFavoriteCoursesPage(studentid, page, size);
 
         // 返回成功响应
-        return Result.success(res);
+        if(res!=null) {
+            return Result.success(res);
+        }
+        else{
+            return Result.error(null);
+        }
     }
 }
