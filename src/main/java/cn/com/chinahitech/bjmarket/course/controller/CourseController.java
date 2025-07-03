@@ -4,28 +4,32 @@ import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.course.DTO.CID;
 import cn.com.chinahitech.bjmarket.course.DTO.CourseRequestDTO;
 import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
-import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
-import cn.com.chinahitech.bjmarket.course.Service.CourseService;
-import cn.com.chinahitech.bjmarket.course.Service.CourserankService;
-import cn.com.chinahitech.bjmarket.course.Service.FavoriteService;
+import cn.com.chinahitech.bjmarket.course.Service.*;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
+import cn.com.chinahitech.bjmarket.course.entity.CourseScores;
 import cn.com.chinahitech.bjmarket.course.entity.Favorite;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/course")
 public class CourseController {
     @Autowired
+    HttpServletRequest request;
+    @Autowired
     private CourseService courseService;
+    @Autowired
+    private CourseKuService courseKuService;
+    @Autowired
+    private CourseScoreService courseScoreService;
 
     @RequestMapping(value="/queryByKeyword",method = RequestMethod.POST)
     public String queryByKeyword(@RequestBody Keyword keyword){
@@ -46,6 +50,77 @@ public class CourseController {
             result.put("status","501");
             result.put("msg","异常："+ex.getMessage());
         }
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value="/personalRecom",method = RequestMethod.GET)
+    public String personalRecom(){
+        List<Course> courseList =null;
+        List<Course> courseList0 =null;
+        List<CourseScores> courseScoresList=null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        int grade=(int)request.getSession().getAttribute("grade");
+        int cBankId=0;
+        try {
+            String major=(String) request.getSession().getAttribute("majorName");
+            cBankId=courseKuService.queryIdBymajor(major);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+        if(grade==4) {
+            try {
+                courseList = courseService.queryPGCourse();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                result.put("status","501");
+                result.put("msg","异常："+ex.getMessage());
+            }
+        }else {
+
+            String studentId=(String) request.getSession().getAttribute("studentId");
+            try{
+                courseScoresList=courseScoreService.queryLearnedCourse(studentId);
+                List<String> courseNames = courseScoresList.stream()
+                        .map(CourseScores::getCourseName)
+                        .collect(Collectors.toList());
+                courseList=courseService.personalRecom1(courseNames,cBankId,grade);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                result.put("status","501");
+                result.put("msg","异常："+ex.getMessage());
+            }
+        }
+        int size=courseList.size();
+        if (size<10){
+            try {
+                courseList0=courseService.personalRecom2(cBankId,grade);
+                courseList.addAll(courseList0);
+                size=courseList.size();
+                if (size>10){
+                    courseList.subList(0,10);
+                }
+                else if (size<10){
+                    courseList0=courseService.personalRecom3(cBankId);
+                    courseList = Stream.concat(courseList.stream(), courseList0.stream())
+                            .limit(10)
+                            .distinct() // 基于Course的equals方法去重，需要正确实现equals/hashCode
+                            .collect(Collectors.toList());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                result.put("status","501");
+                result.put("msg","异常："+ex.getMessage());
+            }
+        }else if (size>10){
+            courseList=courseList.subList(0,10);
+        }
+        result.put("status","200");
+        result.put("msg","检索成功！");
+        result.put("data",courseList);
+
+
         return JSON.toJSONString(result);
     }
 
@@ -103,8 +178,6 @@ public class CourseController {
 
     @Autowired
     private FavoriteService favoriteService;
-    @Autowired
-    HttpServletRequest request;
 
     @RequestMapping(value = "/addFavorite",method = RequestMethod.POST)
     public String addFavorite(@RequestBody CID cid){
@@ -183,4 +256,4 @@ public class CourseController {
 }
 }
 
-//  http://localhost:8081/course/deleteFavorite
+//  http://localhost:8081/course/personalRecom
