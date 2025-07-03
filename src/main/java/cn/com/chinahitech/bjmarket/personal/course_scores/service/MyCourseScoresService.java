@@ -1,5 +1,6 @@
 package cn.com.chinahitech.bjmarket.personal.course_scores.service;
 
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
 import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,5 +16,5 @@ import java.util.List;
  */
 public interface MyCourseScoresService extends IService<MyCourseScores> {
     //查询学生得分情况
-    List<MyCourseScores> getAll(String studentid);
+    List<CourseScoreData> getAll(String studentid);
 }

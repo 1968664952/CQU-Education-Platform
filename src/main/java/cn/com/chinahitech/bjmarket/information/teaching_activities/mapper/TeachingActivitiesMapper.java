@@ -3,10 +3,7 @@ package cn.com.chinahitech.bjmarket.information.teaching_activities.mapper;
 import cn.com.chinahitech.bjmarket.information.entity.MID;
 import cn.com.chinahitech.bjmarket.information.teaching_activities.entity.TeachingActivities;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -18,6 +15,7 @@ import java.util.List;
  * @author zhufu
  * @since 2025-07-01
  */
+@Mapper
 public interface TeachingActivitiesMapper extends BaseMapper<TeachingActivities> {
     @Insert("insert into teaching_activities(title,content,organizer,category,activity_begin,activity_end,view_count)"+
             "values(#{title},#{content},#{organizer},#{category},#{activityBegin},#{activityEnd},#{viewCount})")

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-06-30
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/admin/academic_journal")
 public class AdminAcademicJournalController {
     @Autowired
@@ -43,7 +44,7 @@ public class AdminAcademicJournalController {
 
     @GetMapping("/detail")
     public Result<AcademicJournal> list(@RequestBody MID id){
-        AcademicJournal aj = academicJournalService.findById(id);
+        AcademicJournal aj = academicJournalService.findByIdAdmin(id);
         if(aj!=null) {
             return Result.success(aj);
         }

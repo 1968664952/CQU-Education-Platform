@@ -26,4 +26,6 @@ public interface AcademicJournalService extends IService<AcademicJournal> {
     int delete(MID id);
     //获取单个文章信息
     AcademicJournal findById(MID id);
+    //
+    AcademicJournal findByIdAdmin(MID id);
 }

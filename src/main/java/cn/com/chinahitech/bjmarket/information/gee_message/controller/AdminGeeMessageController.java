@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-07-01
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/admin/gee_message")
 public class AdminGeeMessageController {
     @Autowired

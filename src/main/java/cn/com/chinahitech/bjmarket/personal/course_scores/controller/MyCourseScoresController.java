@@ -2,6 +2,7 @@ package cn.com.chinahitech.bjmarket.personal.course_scores.controller;
 
 
 import cn.com.chinahitech.bjmarket.common.Result;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
 import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
 import cn.com.chinahitech.bjmarket.personal.course_scores.service.MyCourseScoresService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,15 @@ import java.util.List;
  * @since 2025-07-02
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/personal_feild")
 public class MyCourseScoresController {
     @Autowired
     private MyCourseScoresService myCourseScoresService;
 
     @GetMapping("/{studentid}/getCourseScores")
-    public Result<List<MyCourseScores>> getAll(@PathVariable String studentid){
-        List<MyCourseScores> cs = myCourseScoresService.getAll(studentid);
+    public Result<List<CourseScoreData>> getAll(@PathVariable String studentid){
+        List<CourseScoreData> cs = myCourseScoresService.getAll(studentid);
         if(!cs.isEmpty()){
             return Result.success(cs);
         }

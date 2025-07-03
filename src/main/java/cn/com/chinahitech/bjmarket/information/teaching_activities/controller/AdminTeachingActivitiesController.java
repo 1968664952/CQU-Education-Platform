@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2025-07-01
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/admin/teaching_activities")
 public class AdminTeachingActivitiesController {
     @Autowired
