@@ -2,9 +2,7 @@ package cn.com.chinahitech.bjmarket.personal.course_scores.controller;
 
 
 import cn.com.chinahitech.bjmarket.common.Result;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.GPAInfo;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.*;
 import cn.com.chinahitech.bjmarket.personal.course_scores.service.MyCourseScoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,11 +35,33 @@ public class MyCourseScoresController {
         }
     }
 
-    @PostMapping("/{studentId}")
+    @PostMapping("/{studentId}/getGPA")
     public Result<GPAInfo> getStudentGPA(@PathVariable String studentId) {
         GPAInfo gpa=myCourseScoresService.calculateGPA(studentId);
         if(gpa!=null){
             return Result.success(gpa);
+        }
+        else{
+            return  Result.error(null);
+        }
+    }
+
+    @PostMapping("/{studentId}/getCreditSummary")
+    public Result<Credit> getStudentCreditSummary(@PathVariable String studentId) {
+        Credit cd = myCourseScoresService.getCreditSummary(studentId);
+        if(cd!=null){
+            return Result.success(cd);
+        }
+        else{
+            return  Result.error(null);
+        }
+    }
+
+    @PostMapping("/{studentId}/getCourseCount")
+    public Result<CourseCount> getStudentCourseCount(@PathVariable String studentId) {
+        CourseCount cc = myCourseScoresService.getCourseCounts(studentId);
+        if(cc!=null){
+            return Result.success(cc);
         }
         else{
             return  Result.error(null);

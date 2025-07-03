@@ -1,9 +1,7 @@
 package cn.com.chinahitech.bjmarket.personal.course_scores.service.impl;
 
 import cn.com.chinahitech.bjmarket.course.Mapper.CourseScoresMapper;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.GPAInfo;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.*;
 import cn.com.chinahitech.bjmarket.personal.course_scores.mapper.MyCourseScoresMapper;
 import cn.com.chinahitech.bjmarket.personal.course_scores.service.MyCourseScoresService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -57,9 +55,18 @@ public class MyCourseScoresServiceImpl extends ServiceImpl<MyCourseScoresMapper,
             totalCredits += course.getCourseCredit();
         }
 
-        double gpa = totalCredits > 0 ? totalPoints / totalCredits : 0.0;
+        double gpa = totalCredits > 0 ? Math.round(totalPoints / totalCredits*10)/10.0 : 0.0;
         return new GPAInfo(studentId, gpa);
     }
 
+    @Override
+    public Credit getCreditSummary(String studentId) {
+        return myCourseScoresMapper.getCreditRequirementWithEarned(studentId);
+    }
+
+    @Override
+    public CourseCount getCourseCounts(String studentId) {
+        return myCourseScoresMapper.getCourseCounts(studentId);
+    }
 
 }

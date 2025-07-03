@@ -1,8 +1,6 @@
 package cn.com.chinahitech.bjmarket.personal.course_scores.service;
 
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.CourseScoreData;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.GPAInfo;
-import cn.com.chinahitech.bjmarket.personal.course_scores.entity.MyCourseScores;
+import cn.com.chinahitech.bjmarket.personal.course_scores.entity.*;
 import cn.com.chinahitech.bjmarket.personal.course_scores.mapper.MyCourseScoresMapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,5 +19,9 @@ public interface MyCourseScoresService extends IService<MyCourseScores> {
     List<CourseScoreData> getAll(String studentid);
     //获得GPA
     GPAInfo calculateGPA(String studentId);
+    //获得应修学分和已修学分
+    Credit getCreditSummary(String studentId);
+    //获取必修课与选修课总数
+    CourseCount getCourseCounts(String studentId);
 
 }
