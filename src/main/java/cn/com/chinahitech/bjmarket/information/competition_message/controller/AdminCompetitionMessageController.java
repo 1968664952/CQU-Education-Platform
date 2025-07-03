@@ -32,7 +32,7 @@ public class AdminCompetitionMessageController {
         return Result.success(null);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Result<PageBean<CompetitionMessage>> list(@RequestBody SearchTag searchTag) {
         PageBean<CompetitionMessage> pb =competitionMessageService.getlist(searchTag);
         if(pb==null){
@@ -41,7 +41,7 @@ public class AdminCompetitionMessageController {
         return Result.success(pb);
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     public Result<CompetitionMessage> list(@RequestBody MID id){
         CompetitionMessage cm = competitionMessageService.findByIdAdmin(id);
         return Result.success(cm);

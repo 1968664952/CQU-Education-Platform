@@ -32,13 +32,13 @@ public class AdminTeachingActivitiesController {
         return Result.success(null);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Result<PageBean<TeachingActivities>> list(@RequestBody SearchTag searchTag){
         PageBean<TeachingActivities> pb =teachingActivitiesService.getlist(searchTag);
         return Result.success(pb);
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     public Result<TeachingActivities> list(@RequestBody MID id){
         TeachingActivities ta = teachingActivitiesService.findByIdAdmin(id);
         return Result.success(ta);

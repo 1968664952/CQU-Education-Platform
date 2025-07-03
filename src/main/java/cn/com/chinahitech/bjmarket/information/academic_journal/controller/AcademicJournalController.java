@@ -26,13 +26,13 @@ public class AcademicJournalController {
     @Autowired
     private AcademicJournalService academicJournalService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Result<PageBean<AcademicJournal>> list(@RequestBody SearchTag searchTag){
         PageBean<AcademicJournal> pb = academicJournalService.getlist(searchTag);
         return Result.success(pb);
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     public Result<AcademicJournal> list(@RequestBody MID id){
         AcademicJournal aj = academicJournalService.findById(id);
         if(aj!=null) {
