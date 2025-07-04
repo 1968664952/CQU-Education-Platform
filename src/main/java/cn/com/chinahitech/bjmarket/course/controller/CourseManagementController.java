@@ -4,6 +4,7 @@ import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.Service.CourseManagementService;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
+import cn.com.chinahitech.bjmarket.utils.VideoMetadataUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ClassUtils;
@@ -44,57 +45,81 @@ public class CourseManagementController {
 
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
     @PostMapping("/uploadPahtFile")
-    public String uploadPathFile(MultipartFile uploadFile, HttpServletRequest req,String courseId, String title, int position) {
-        Map<String,Object> result =new HashMap<String,Object>();
-        String p= ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/video/";
-        System.out.println(p);
-        if ("".equals(uploadFile.getOriginalFilename())){
-            return "";
+    public String uploadPathFile(MultipartFile uploadFile,
+                                 HttpServletRequest req,
+                                 String courseId,
+                                 String title,
+                                 int position) {
+        Map<String, Object> result = new HashMap<>();
+        String basePath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/video/";
+        System.out.println("视频存储根路径: " + basePath);
+
+        // 1. 检查文件是否为空
+        if (uploadFile.isEmpty()) {
+            result.put("status", "400");
+            result.put("msg", "上传文件不能为空");
+            return JSON.toJSONString(result);
         }
-        String filePath = "";
-        String format = sdf.format(new Date());
-//固定物理路径
-        File folder = new File(p + format);
-//如果文件夹不存在则创建
+
+        // 2. 准备存储目录（按日期分类）
+        String dateFolder = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+        File folder = new File(basePath + dateFolder);
         if (!folder.exists()) {
-            folder.mkdirs();//创建文件夹
+            folder.mkdirs(); // 创建多级目录
         }
-//上传的文件名
-        String oldName = uploadFile.getOriginalFilename();
-//新的文件名
-        String newName = courseId +"."+ position +
-                oldName.substring(oldName.lastIndexOf("."), oldName.length());
+
+        // 3. 生成唯一文件名（避免冲突）
+        String originalFilename = uploadFile.getOriginalFilename();
+        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String newName = courseId + "." + position + fileExtension; // 格式：courseId.position.扩展名
+
         try {
-//将uploadFile存到一个路径为：folder，名字为：newName的文件，
-            System.out.println(uploadFile.getSize());
-            uploadFile.transferTo(new File(folder, newName));
-//获取项目访问的路径
-            filePath = req.getScheme() + "://" + req.getServerName() + ":" +
-                    req.getServerPort() + "/video/" + format + newName;
-            System.out.println(filePath);
-            filePath="/video/" + format + newName;
-            Chapter chapter=new Chapter();
+            // 4. 保存文件到本地
+            File targetFile = new File(folder, newName);
+            uploadFile.transferTo(targetFile);
+            System.out.println("文件已保存至: " + targetFile.getAbsolutePath());
+
+            // 5. 获取视频元数据（时长、分辨率）
+            String localFilePath = targetFile.getAbsolutePath(); // 本地物理路径
+            double duration = VideoMetadataUtil.getDuration(localFilePath); // 时长（秒）
+
+            // 6. 构建访问URL（前端可访问的路径）
+            String filePath = "/video/" + dateFolder + "/" + newName;
+            String fullUrl = req.getScheme() + "://" + req.getServerName() + ":" +
+                    req.getServerPort() + filePath;
+
+            // 7. 创建章节对象并设置元数据
+            Chapter chapter = new Chapter();
             chapter.setCourseId(courseId);
             chapter.setTitle(title);
             chapter.setPosition(position);
             chapter.setUrl(filePath);
-            System.out.println("!!!!!:"+chapter);
-            int r= chapterService.addChapter(chapter);
-            if (r==1){
-                result.put("status","200");
-                result.put("msg","上传成功！");
-            }else {
+            chapter.setDuration(duration); // 设置时长（关键！）
+
+            // 8. 插入数据库
+            int insertResult = chapterService.addChapter(chapter);
+            if (insertResult > 0) {
+                result.put("status", "200");
+                result.put("msg", "视频上传成功");
+                result.put("chapterId", chapter.getChapterId()); // 返回生成的章节ID
+            } else {
                 result.put("status", "500");
-                result.put("msg", "上传数据库存在问题");
+                result.put("msg", "数据库插入失败");
             }
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            result.put("status","501");
-            result.put("msg","异常："+ex.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            result.put("status", "501");
+            result.put("msg", "文件保存失败: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "502");
+            result.put("msg", "系统异常: " + e.getMessage());
         }
+
         return JSON.toJSONString(result);
     }
+
 
     @PostMapping("/deleteChapter")
     public String deleteVideo(@RequestBody Chapter chapter) {
@@ -104,7 +129,7 @@ public class CourseManagementController {
             // 1. 根据chapterId获取章节信息
             chapter = chapterService.queryOneChapter(chapter.getChapterId());
             if (chapter == null) {
-                result.put("status", "404");
+                result.put("status", "500");
                 result.put("msg", "章节记录不存在");
                 return JSON.toJSONString(result);
             }
@@ -143,9 +168,9 @@ public class CourseManagementController {
             // 7. 构建响应
             if (fileDeleted && dbResult > 0) {
                 result.put("status", "200");
-                result.put("msg", "视频删除成功");
+                result.put("msg", "视频删除成功！");
             } else {
-                result.put("status", "501");
+                result.put("status", "500");
                 result.put("msg", "部分删除失败");
 
                 if (!fileDeleted) {
@@ -158,7 +183,7 @@ public class CourseManagementController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            result.put("status", "500");
+            result.put("status", "501");
             result.put("msg", "系统异常: " + e.getMessage());
         }
 

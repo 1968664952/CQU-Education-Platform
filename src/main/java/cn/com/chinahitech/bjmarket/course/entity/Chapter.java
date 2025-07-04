@@ -18,7 +18,8 @@ public class Chapter {
     private Integer position;
     @Setter
     private String url;
-    private Integer duration;
+    @Setter
+    private Double duration;
     private String resolution;
     private LocalDateTime createdAt;
 }
