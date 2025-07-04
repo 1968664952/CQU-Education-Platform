@@ -3,7 +3,7 @@ import cn.com.chinahitech.bjmarket.login.DTO.LoginRequest;
 import cn.com.chinahitech.bjmarket.login.Service.StudentService;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.login.entity.Student;
-import cn.com.chinahitech.bjmarket.utils.JwtUtil;
+import cn.com.chinahitech.bjmarket.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ public class AuthController {
 
         try {
             Student student = studentService.login(studentId, password);
-            String token = JwtUtil.generateToken(student.getStudentId());
+            String token = JwtUtils.generateToken(student.getStudentId(),"user");
 
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
