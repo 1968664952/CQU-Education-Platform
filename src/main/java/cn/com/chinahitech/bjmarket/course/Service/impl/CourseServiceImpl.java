@@ -95,4 +95,23 @@ public class CourseServiceImpl implements CourseService {
         int result=courseMapper.update(null,wrapper);
         return result;
     }
+
+    @Override
+    public List<Course> courseList(int cBankId, int grade, int newOrHot) {
+        List<Course> courseList=null;
+        QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
+
+        wrapper.eq("c_bank_id",cBankId);
+        if (grade!=0){
+            wrapper.eq("grade",grade);
+        }
+        if (newOrHot==0){
+            wrapper.orderByDesc("created_at");
+        }else {
+            wrapper.orderByDesc("total_play_count");
+        }
+
+        courseList=courseMapper.selectList(wrapper);
+        return courseList;
+    }
 }

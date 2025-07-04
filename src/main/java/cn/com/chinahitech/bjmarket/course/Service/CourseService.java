@@ -12,4 +12,5 @@ public interface CourseService {
     List<Course> queryPGCourse();
     int addFavoriteCount(String courseId);
     int delFavoriteCount(String courseId);
+    List<Course> courseList(int cBankId, int grade, int newOrHot);
 }

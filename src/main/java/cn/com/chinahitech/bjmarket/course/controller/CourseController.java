@@ -2,6 +2,7 @@ package cn.com.chinahitech.bjmarket.course.controller;
 
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.course.DTO.CID;
+import cn.com.chinahitech.bjmarket.course.DTO.CourseLibrary;
 import cn.com.chinahitech.bjmarket.course.DTO.CourseRequestDTO;
 import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
 import cn.com.chinahitech.bjmarket.course.Service.*;
@@ -37,6 +38,28 @@ public class CourseController {
         Map<String,Object> result =new HashMap<String,Object>();
         try{
             courseList=courseService.queryCourseByKeyword(keyword.getKeyword());
+            if(courseList.size()>0){
+                result.put("status","200");
+                result.put("msg","检索成功！");
+                result.put("data",courseList);
+            }else {
+                result.put("status","500");
+                result.put("msg","该课程不存在");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value="/courseList",method = RequestMethod.POST)
+    public String courseList(@RequestBody CourseLibrary courseLibrary){
+        List<Course> courseList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            courseList=courseService.courseList(courseLibrary.getCBankId(),courseLibrary.getGrade(),courseLibrary.getNewOrHot());
             if(courseList.size()>0){
                 result.put("status","200");
                 result.put("msg","检索成功！");
@@ -264,4 +287,4 @@ public class CourseController {
 }
 }
 
-//  http://localhost:8081/course/personalRecom
+//  http://localhost:8081/course/courseList
