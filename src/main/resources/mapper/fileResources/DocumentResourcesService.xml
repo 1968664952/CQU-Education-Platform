@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.chinahitech.bjmarket.fileResources.mapper.DocumentResourcesMapper">
+    <!-- 在查询中使用resultMap -->
+    <select id="showlist" resultType="cn.com.chinahitech.bjmarket.fileResources.entity.DocumentResources">
+        select * from document_resources
+        <where>
+            <if test="primaryCategory != null">
+                primary_category like concat('%', #{primaryCategory}, '%')
+            </if>
+            <if test="secondaryCategory != null">
+                and secondary_category like concat('%', #{secondaryCategory}, '%')
+            </if>
+            <if test="useyear != null">
+                and useyear like concat('%', #{useyear}, '%')
+            </if>
+            <if test="applicableMajor != null">
+                and applicable_major like concat('%', #{applicableMajor}, '%')
+            </if>
+            <if test="applicableGrade != null">
+                and applicable_grade like concat('%', #{applicableGrade}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="s_showlist" resultType="cn.com.chinahitech.bjmarket.fileResources.entity.sDocumentResources">
+        select
+        id,
+        title,
+        primary_category,
+        secondary_category,
+        useryear,
+        view_count,
+        download_count,
+        publish_time,
+        author_name,
+        applicable_major,
+        applicable_grade
+        from document_resources
+        <where>
+                status = 1
+            <if test="primaryCategory != null">
+                and primary_category like concat('%', #{primaryCategory}, '%')
+            </if>
+            <if test="secondaryCategory != null">
+                and secondary_category like concat('%', #{secondaryCategory}, '%')
+            </if>
+            <if test="useyear != null">
+                and year like concat('%', #{useyear}, '%')
+            </if>
+            <if test="applicableMajor != null">
+                and applicableMajor like concat('%', #{applicableMajor}, '%')
+            </if>
+            <if test="applicableGrade != null">
+                and applicableGrade like concat('%', #{applicableGrade}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>

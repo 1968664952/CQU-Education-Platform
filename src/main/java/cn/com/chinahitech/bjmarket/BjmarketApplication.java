@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("cn.com.chinahitech.bjmarket.course.Mapper")
 @MapperScan("cn.com.chinahitech.bjmarket.information.*.mapper")
 @MapperScan("cn.com.chinahitech.bjmarket.personal.*.mapper")
+@MapperScan("cn.com.chinahitech.bjmarket.fileResources.mapper")
 @MapperScan("cn.com.chinahitech.bjmarket.login.Mapper")
 public class BjmarketApplication {
 
