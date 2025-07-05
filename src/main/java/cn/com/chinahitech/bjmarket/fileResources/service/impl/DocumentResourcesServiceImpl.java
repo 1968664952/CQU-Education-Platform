@@ -2,6 +2,7 @@ package cn.com.chinahitech.bjmarket.fileResources.service.impl;
 
 import cn.com.chinahitech.bjmarket.PageBean;
 import cn.com.chinahitech.bjmarket.fileResources.entity.DocumentResources;
+import cn.com.chinahitech.bjmarket.fileResources.entity.dayUpload;
 import cn.com.chinahitech.bjmarket.fileResources.entity.drSearchTag;
 import cn.com.chinahitech.bjmarket.fileResources.mapper.DocumentResourcesMapper;
 import cn.com.chinahitech.bjmarket.fileResources.service.DocumentResourcesService;
@@ -72,5 +73,23 @@ public class DocumentResourcesServiceImpl extends ServiceImpl<DocumentResourcesM
     public int updatefilepath(String filePath,int id){
         int result = documentResourcesMapper.updatefilepath(filePath,id);
         return  result;
+    }
+
+    @Override
+    public int increaseView(int id){
+        int result = documentResourcesMapper.increaseView(id);
+        return result;
+    }
+
+    @Override
+    public int increaseDownload(int id){
+        int result = documentResourcesMapper.increaseDownload(id);
+        return result;
+    }
+
+    @Override
+    public List<dayUpload> recent7daySituation(){
+        List<dayUpload> dayUploadslist=documentResourcesMapper.recent7daySituation();
+        return dayUploadslist;
     }
 }

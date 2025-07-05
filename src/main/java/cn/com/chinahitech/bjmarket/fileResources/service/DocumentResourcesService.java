@@ -2,8 +2,11 @@ package cn.com.chinahitech.bjmarket.fileResources.service;
 
 import cn.com.chinahitech.bjmarket.PageBean;
 import cn.com.chinahitech.bjmarket.fileResources.entity.DocumentResources;
+import cn.com.chinahitech.bjmarket.fileResources.entity.dayUpload;
 import cn.com.chinahitech.bjmarket.fileResources.entity.drSearchTag;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -29,4 +32,6 @@ public interface DocumentResourcesService extends IService<DocumentResources> {
     //增加浏览量和下载量
     int increaseView(int id);
     int increaseDownload(int id);
+    //最近7天上传量
+    List<dayUpload> recent7daySituation();
 }

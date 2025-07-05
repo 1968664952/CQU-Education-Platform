@@ -5,6 +5,7 @@ import cn.com.chinahitech.bjmarket.PageBean;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.fileResources.entity.DocumentResources;
+import cn.com.chinahitech.bjmarket.fileResources.entity.dayUpload;
 import cn.com.chinahitech.bjmarket.fileResources.entity.drSearchTag;
 import cn.com.chinahitech.bjmarket.fileResources.service.DocumentResourcesService;
 import com.alibaba.fastjson.JSON;
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -201,6 +203,12 @@ public class AdminDocumentResourcesController {
         }
 
         return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/recent7day")
+    public Result<List<dayUpload>> recent7day() {
+        List<dayUpload> dayUploads=documentResourcesService.recent7daySituation();
+        return Result.success(dayUploads);
     }
 
 }

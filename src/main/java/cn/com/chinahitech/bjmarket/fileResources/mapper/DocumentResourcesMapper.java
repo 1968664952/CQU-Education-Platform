@@ -1,6 +1,8 @@
 package cn.com.chinahitech.bjmarket.fileResources.mapper;
 
 import cn.com.chinahitech.bjmarket.fileResources.entity.DocumentResources;
+import cn.com.chinahitech.bjmarket.fileResources.entity.dayUpload;
+import cn.com.chinahitech.bjmarket.fileResources.entity.documentResMenuRec;
 import cn.com.chinahitech.bjmarket.fileResources.entity.sDocumentResources;
 import cn.com.chinahitech.bjmarket.information.entity.MID;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -53,4 +55,23 @@ public interface DocumentResourcesMapper extends BaseMapper<DocumentResources> {
     @Update("UPDATE document_resources SET download_count = download_count + 1 WHERE id = #{id}")
     int increaseDownload(int id);
 
+    // 获取下载量和浏览量前10的学生笔记
+    @Select("SELECT id, title, download_count" +
+            "FROM document_resources " +
+            "WHERE primary_category = '学生笔记' " +  // 添加一级分类限制条件
+            "ORDER BY download_count DESC " +
+            "LIMIT 10")
+    List<documentResMenuRec> selectTop10StudentNotesByDownloadCount();
+
+    @Select("SELECT id, title,view_count"+
+            "FROM document_resources " +
+            "WHERE primary_category = '学生笔记' " +  // 一级分类限制
+            "ORDER BY view_count DESC " +  // 按浏览量降序排序
+            "LIMIT 10")
+    List<documentResMenuRec> selectTop10StudentNotesByViewCount();
+
+    @Select("SELECT * FROM daily_resource_stats " +
+            "WHERE stat_date >= CURDATE() - INTERVAL 7 DAY " +
+            "ORDER BY stat_date DESC")
+    List<dayUpload> recent7daySituation();
 }
