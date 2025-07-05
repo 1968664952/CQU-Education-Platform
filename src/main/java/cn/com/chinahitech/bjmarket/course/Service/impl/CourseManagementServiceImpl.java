@@ -6,6 +6,7 @@ import cn.com.chinahitech.bjmarket.course.entity.Course;
 
 import cn.com.chinahitech.bjmarket.course.entity.DailyCourseUpload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,17 @@ public class CourseManagementServiceImpl implements CourseManagementService {
     @Override
     public int deleteCourse(Integer courseId) {
         return courseManagementMapper.deleteCourse(courseId);
+    }
+
+    @Override
+    public int updateCover(int courseId, String coverUrl) {
+        UpdateWrapper<Course> wrapper=new UpdateWrapper<Course>();
+        wrapper.eq("course_id",courseId);
+
+        Course course=new Course();
+        course.setCoverUrl(coverUrl);
+
+        return courseManagementMapper.update(course,wrapper);
     }
 
 

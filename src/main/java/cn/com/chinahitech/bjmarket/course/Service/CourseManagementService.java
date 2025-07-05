@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CourseManagementService {
     int addCourse(Course course);
-
     int deleteCourse(Integer cBankId);
+    int updateCover(int courseId, String coverUrl);
 
 }
