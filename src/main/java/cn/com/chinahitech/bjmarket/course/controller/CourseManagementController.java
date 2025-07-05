@@ -2,8 +2,10 @@ package cn.com.chinahitech.bjmarket.course.controller;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.Service.CourseManagementService;
+import cn.com.chinahitech.bjmarket.course.Service.DailyCourseUploadService;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
+import cn.com.chinahitech.bjmarket.course.entity.DailyCourseUpload;
 import cn.com.chinahitech.bjmarket.utils.VideoMetadataUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -32,6 +31,67 @@ public class CourseManagementController {
         System.out.println(course);
         int result = courseManagementService.addCourse(course);
         return result > 0 ? Result.success("添加成功") : Result.error("添加失败");
+    }
+
+    @PostMapping("/uploadCover")
+    public String uploadCover(MultipartFile uploadFile,
+                                 HttpServletRequest req,
+                                 int courseId) {
+        Map<String, Object> result = new HashMap<>();
+        String basePath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/image/course_cover/";
+        System.out.println("视频存储根路径: " + basePath);
+
+        // 1. 检查文件是否为空
+        if (uploadFile.isEmpty()) {
+            result.put("status", "400");
+            result.put("msg", "上传文件不能为空");
+            return JSON.toJSONString(result);
+        }
+
+        // 2. 准备存储目录（按日期分类）
+        String dateFolder = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+        File folder = new File(basePath + dateFolder);
+        if (!folder.exists()) {
+            folder.mkdirs(); // 创建多级目录
+        }
+
+        // 3. 生成唯一文件名（避免冲突）
+        String originalFilename = uploadFile.getOriginalFilename();
+        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String newName = courseId + fileExtension; // 格式：courseId.扩展名
+
+        try {
+            // 4. 保存文件到本地
+            File targetFile = new File(folder, newName);
+            uploadFile.transferTo(targetFile);
+            System.out.println("文件已保存至: " + targetFile.getAbsolutePath());
+
+            // 6. 构建访问URL（前端可访问的路径）
+            String filePath = "/image/course_cover/" + dateFolder + "/" + newName;
+            String fullUrl = req.getScheme() + "://" + req.getServerName() + ":" +
+                    req.getServerPort() + filePath;
+
+            // 8. 更新数据库
+            int updateResult = courseManagementService.updateCover(courseId,filePath);
+            if (updateResult==1) {
+                result.put("status", "200");
+                result.put("msg", "封面上传成功");
+            } else {
+                result.put("status", "500");
+                result.put("msg", "数据库更新失败");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            result.put("status", "501");
+            result.put("msg", "文件保存失败: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "502");
+            result.put("msg", "系统异常: " + e.getMessage());
+        }
+
+        return JSON.toJSONString(result);
     }
 
     @DeleteMapping("/deleteCourse")
@@ -187,6 +247,28 @@ public class CourseManagementController {
             result.put("msg", "系统异常: " + e.getMessage());
         }
 
+        return JSON.toJSONString(result);
+    }
+
+    @Autowired
+    private DailyCourseUploadService dailyCourseUploadService;
+
+    @RequestMapping(value="/dailyCourseUpload",method = RequestMethod.GET)
+    public String dailyCourseUpload(){
+        List<DailyCourseUpload> dailyCourseUploadList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            dailyCourseUploadList=dailyCourseUploadService.queryUpload();
+
+            result.put("status","200");
+            result.put("msg","检索成功！");
+            result.put("data",dailyCourseUploadList);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
         return JSON.toJSONString(result);
     }
 
