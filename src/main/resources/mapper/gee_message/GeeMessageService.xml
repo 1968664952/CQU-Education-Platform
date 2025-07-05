@@ -9,6 +9,7 @@
         academy,
         category,
         attachment_link,
+        publish_date,
         view_count
         from gee_message
         <where>
@@ -19,5 +20,6 @@
                 and academy like concat('%', #{organizer}, '%')
             </if>
         </where>
+        ORDER BY publish_date DESC
     </select>
 </mapper>

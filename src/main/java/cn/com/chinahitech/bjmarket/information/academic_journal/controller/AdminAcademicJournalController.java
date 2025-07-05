@@ -64,7 +64,7 @@ public class AdminAcademicJournalController {
         }
     }
 
-    @DeleteMapping("delete")
+    @DeleteMapping("/delete")
     public  Result<?> delete(@RequestBody MID id){
         int res = academicJournalService.delete(id);
         if(res==0) {
