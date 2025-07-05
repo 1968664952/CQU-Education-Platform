@@ -28,7 +28,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         if (admin == null) return false;
         String hashedPassword = HashUtil.sha256(plainPassword);
         // 真实环境请使用 BCryptPasswordEncoder
-        return Objects.equals(admin.getPasswordHash(), hashedPassword); // 简化示例
+        return admin.getPasswordHash().equalsIgnoreCase(hashedPassword); // 简化示例
     }
      public List<Student> findAll(){
         return administratorMapper.findAll();
