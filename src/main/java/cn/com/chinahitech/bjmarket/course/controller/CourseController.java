@@ -6,10 +6,7 @@ import cn.com.chinahitech.bjmarket.course.DTO.CourseLibrary;
 import cn.com.chinahitech.bjmarket.course.DTO.CourseRequestDTO;
 import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
 import cn.com.chinahitech.bjmarket.course.Service.*;
-import cn.com.chinahitech.bjmarket.course.entity.Chapter;
-import cn.com.chinahitech.bjmarket.course.entity.Course;
-import cn.com.chinahitech.bjmarket.course.entity.CourseScores;
-import cn.com.chinahitech.bjmarket.course.entity.Favorite;
+import cn.com.chinahitech.bjmarket.course.entity.*;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -255,7 +252,6 @@ public class CourseController {
 
     @RequestMapping(value="/deleteFavorite",method = RequestMethod.POST)
     public String deleteFavorite(@RequestBody CID cid){
-        List<Favorite> favoriteList =null;
         Map<String,Object> map =new HashMap<String,Object>();
         try{
             int result=favoriteService.deleteFavorite(cid.getCourse_id(),(String) request.getSession().getAttribute("studentId"));
@@ -273,6 +269,63 @@ public class CourseController {
             map.put("msg","异常："+ex.getMessage());
         }
         return JSON.toJSONString(map);
+    }
+
+    //
+
+    @Autowired
+    private VideoPlaybackHistoryService videoPlaybackHistoryService;
+
+    @PostMapping("/saveOrUpdateHistory")
+    public String saveProgress(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
+        String studentId=(String)request.getSession().getAttribute("studentId");
+        int chapterId=videoPlaybackHistory.getChapterId();
+        int position=videoPlaybackHistory.getPosition();
+        int lastPosition=videoPlaybackHistory.getLastPosition();
+        Map<String,Object> map =new HashMap<String,Object>();
+        try{
+            int result=videoPlaybackHistoryService.saveOrUpdateHistory(studentId,chapterId,position,lastPosition);
+            if(result==1){
+                map.put("status","200");
+                map.put("msg","添加成功！");
+            }else {
+                map.put("status","500");
+                map.put("msg","添加失败！");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            map.put("status","501");
+            map.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(map);
+
+    }
+
+    @PostMapping("/getLastPosition")
+    public String getLastPosition(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
+        String studentId=(String)request.getSession().getAttribute("studentId");
+        int chapterId=videoPlaybackHistory.getChapterId();
+        int position=videoPlaybackHistory.getPosition();
+
+        Map<String,Object> map =new HashMap<String,Object>();
+        try{
+            int result=0;
+            result=videoPlaybackHistoryService.getLastPosition(studentId,chapterId,position);
+            if(result==-1){
+                map.put("status","500");
+                map.put("msg","没有浏览记录");
+            }else {
+                map.put("status","200");
+                map.put("msg","搜索成功！");
+                map.put("data",result);
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            map.put("status","501");
+            map.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(map);
+
     }
 
     //
