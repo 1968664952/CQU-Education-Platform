@@ -20,5 +20,6 @@
                 and organizer like concat('%', #{organizer}, '%')
             </if>
         </where>
+        ORDER BY activity_begin DESC
     </select>
 </mapper>

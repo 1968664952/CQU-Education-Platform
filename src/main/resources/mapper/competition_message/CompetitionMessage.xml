@@ -24,5 +24,6 @@
                 and organizer like concat('%', #{organizer}, '%')
             </if>
         </where>
+        ORDER BY signup_open DESC
     </select>
 </mapper>
