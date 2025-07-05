@@ -39,6 +39,7 @@
                 and publisher like concat('%', #{publisher}, '%')
             </if>
         </where>
+        ORDER BY publish_date DESC
     </select>
 
 <!--    &lt;!&ndash;动态sql&ndash;&gt;-->
