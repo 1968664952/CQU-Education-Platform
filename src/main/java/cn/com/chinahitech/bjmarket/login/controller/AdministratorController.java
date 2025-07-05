@@ -22,15 +22,19 @@ public class AdministratorController {
 
     @PostMapping("/login")
     public Result<?> login(@RequestBody AdminLoginDTO dto) {
-        boolean valid = administratorService.verifyPassword(dto.getAdministratorId(), dto.getPassword());
-        if (!valid) {
-            throw new RuntimeException("管理员ID或密码错误");
-        }
+        try{
+            boolean valid = administratorService.verifyPassword(dto.getAdministratorId(), dto.getPassword());
+            if (!valid) {
+                throw new RuntimeException("管理员ID或密码错误");
+            }
+            Map<String, Object> data = new HashMap<>();
 
-        String token = JwtUtils.generateToken("admin_" + dto.getAdministratorId(), "admin");
-        Map<String, String> map = new HashMap<>();
-        map.put("token", token);
-        return Result.success(map);
+            String token = JwtUtils.generateToken("admin_" + dto.getAdministratorId(), "admin");
+            data.put("token", token);
+            return Result.success(data);
+        }  catch (Exception e) {
+        return Result.error(e.getMessage());
+    }
     }
 
     @GetMapping("/allstudents")
