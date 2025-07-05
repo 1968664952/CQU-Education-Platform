@@ -26,4 +26,7 @@ public interface DocumentResourcesService extends IService<DocumentResources> {
     int addDocumentResources(DocumentResources dr);
     //重设资源路径
     int updatefilepath(String filePath,int id);
+    //增加浏览量和下载量
+    int increaseView(int id);
+    int increaseDownload(int id);
 }
