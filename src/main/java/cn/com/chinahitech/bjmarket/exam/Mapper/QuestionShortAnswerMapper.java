@@ -8,10 +8,10 @@ import org.apache.ibatis.annotations.*;
 public interface QuestionShortAnswerMapper {
     @Select("SELECT * FROM question_short_answer WHERE paper_id = #{paperId} AND question_id = #{questionId}")
     QuestionShortAnswer getQuestion(@Param("paperId") Integer paperId, @Param("questionId") Integer questionId);
-    @Insert("INSERT INTO short_answer(paper_id, question_type, content, answer, difficulty, explanation, created_at, question_order) " +
-            "VALUES(#{paperId}, #{questionType}, #{content}, #{answer}, #{difficulty}, #{explanation}, #{createdAt}, #{order})")
+    @Insert("INSERT INTO question_short_answer (paper_id, question_type, content, answer, difficulty, created_at, `order`) " +
+            "VALUES(#{paperId}, #{questionType}, #{content}, #{answer}, #{difficulty},  #{createdAt}, #{order})")
     int insert(QuestionShortAnswer question);
 
-    @Delete("DELETE FROM short_answer WHERE question_id = #{questionId}")
+    @Delete("DELETE FROM question_short_answer  WHERE question_id = #{questionId}")
     int deleteById(@Param("questionId") Integer questionId);
 }

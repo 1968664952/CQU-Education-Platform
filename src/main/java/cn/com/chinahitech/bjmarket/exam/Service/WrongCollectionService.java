@@ -49,19 +49,19 @@ public class WrongCollectionService {
             String category = ref.getCategory();
 
             switch (category) {
-                case "选择":
+                case "select":
                     QuestionSelect select = questionSelectMapper.getQuestion(paperId, questionId);
                     if (select != null) result.get("select").add(select);
                     break;
-                case "判断":
+                case "tf":
                     QuestionTF tf = questionTFMapper.getQuestion(paperId, questionId);
                     if (tf != null) result.get("tf").add(tf);
                     break;
-                case "填空":
+                case "blank":
                     QuestionBlank blank = questionBlankMapper.getQuestion(paperId, questionId);
                     if (blank != null) result.get("blank").add(blank);
                     break;
-                case "简答":
+                case "shortAnswer":
                     QuestionShortAnswer sa = questionShortAnswerMapper.getQuestion(paperId, questionId);
                     if (sa != null) result.get("shortAnswer").add(sa);
                     break;
