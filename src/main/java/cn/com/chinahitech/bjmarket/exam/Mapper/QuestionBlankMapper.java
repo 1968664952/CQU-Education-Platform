@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 public interface QuestionBlankMapper {
     @Select("SELECT * FROM question_blank WHERE paper_id = #{paperId} AND question_id = #{questionId}")
     QuestionBlank getQuestion(@Param("paperId") Integer paperId, @Param("questionId") Integer questionId);
-    @Insert("INSERT INTO question_blank(paper_id, question_type, content, answer, difficulty, explanation, created_at, question_order) " +
+    @Insert("INSERT INTO question_blank(paper_id, question_type, content, answer, difficulty, explanation, created_at, `order`) " +
             "VALUES(#{paperId}, #{questionType}, #{content}, #{answer}, #{difficulty}, #{explanation}, #{createdAt}, #{order})")
     int insert(QuestionBlank question);
 

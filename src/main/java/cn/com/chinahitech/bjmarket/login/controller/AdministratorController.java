@@ -9,6 +9,7 @@ import cn.com.chinahitech.bjmarket.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,9 @@ public class AdministratorController {
         }
 
         String token = JwtUtils.generateToken("admin_" + dto.getAdministratorId(), "admin");
-        return Result.success(Map.of("token", token));
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        return Result.success(map);
     }
 
     @GetMapping("/allstudents")
