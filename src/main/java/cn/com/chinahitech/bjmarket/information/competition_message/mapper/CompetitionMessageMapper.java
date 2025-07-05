@@ -19,7 +19,7 @@ import java.util.List;
 @Mapper
 public interface CompetitionMessageMapper extends BaseMapper<CompetitionMessage> {
     @Insert("insert into competition_message(title,content,organizer,category,signup_open,signup_end,competition_date,signup_link,attachment_link,view_count)"+
-            "values(#{title},#{content},#{organizer},#{category},#{signupOpen},#{signupEnd},#{competitionDate},#{attachmentLink},#{viewCount})")
+            "values(#{title},#{content},#{organizer},#{category},#{signupOpen},#{signupEnd},#{competitionDate},#{signupLink},#{attachmentLink},#{viewCount})")
     void add(CompetitionMessage new1);
 
     List<CompetitionMessage> showlist(String title, String organizer);
