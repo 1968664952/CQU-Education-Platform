@@ -44,8 +44,13 @@ public interface DocumentResourcesMapper extends BaseMapper<DocumentResources> {
     @Select("select * from document_resources where id=#{resid}")
     DocumentResources getRes(int resid);
 
-    @Delete("DELETE from academic_journal where id=#{resid}")
-    int deleteById(String id);
+    @Delete("DELETE from academic_journal where id=#{id}")
+    int deleteById(int id);
 
+    @Update("UPDATE document_resources SET view_count = view_count + 1 WHERE id = #{id}")
+    int increaseView(int id);
+
+    @Update("UPDATE document_resources SET download_count = download_count + 1 WHERE id = #{id}")
+    int increaseDownload(int id);
 
 }
