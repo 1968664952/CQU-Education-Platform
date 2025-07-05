@@ -2,8 +2,10 @@ package cn.com.chinahitech.bjmarket.course.controller;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.Service.CourseManagementService;
+import cn.com.chinahitech.bjmarket.course.Service.DailyCourseUploadService;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
+import cn.com.chinahitech.bjmarket.course.entity.DailyCourseUpload;
 import cn.com.chinahitech.bjmarket.utils.VideoMetadataUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -187,6 +186,28 @@ public class CourseManagementController {
             result.put("msg", "系统异常: " + e.getMessage());
         }
 
+        return JSON.toJSONString(result);
+    }
+
+    @Autowired
+    private DailyCourseUploadService dailyCourseUploadService;
+
+    @RequestMapping(value="/dailyCourseUpload",method = RequestMethod.GET)
+    public String dailyCourseUpload(){
+        List<DailyCourseUpload> dailyCourseUploadList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            dailyCourseUploadList=dailyCourseUploadService.queryUpload();
+
+            result.put("status","200");
+            result.put("msg","检索成功！");
+            result.put("data",dailyCourseUploadList);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
         return JSON.toJSONString(result);
     }
 

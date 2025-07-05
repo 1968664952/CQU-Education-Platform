@@ -4,11 +4,15 @@ import cn.com.chinahitech.bjmarket.course.Mapper.CourseManagementMapper;
 import cn.com.chinahitech.bjmarket.course.Service.CourseManagementService;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
 
+import cn.com.chinahitech.bjmarket.course.entity.DailyCourseUpload;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CourseManagementServiceImpl implements CourseManagementService {
@@ -24,4 +28,6 @@ public class CourseManagementServiceImpl implements CourseManagementService {
     public int deleteCourse(Integer courseId) {
         return courseManagementMapper.deleteCourse(courseId);
     }
+
+
 }
