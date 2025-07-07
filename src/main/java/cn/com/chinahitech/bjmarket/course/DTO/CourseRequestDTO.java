@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseRequestDTO {
-    private Integer cBankId;
-    private Integer limit;
+    private int cBankId;
+
 }

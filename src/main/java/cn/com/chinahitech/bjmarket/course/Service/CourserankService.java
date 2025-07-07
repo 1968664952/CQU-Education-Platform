@@ -1,5 +1,6 @@
 package cn.com.chinahitech.bjmarket.course.Service;
 
+import cn.com.chinahitech.bjmarket.course.Mapper.CourseKuMapper;
 import cn.com.chinahitech.bjmarket.course.Mapper.CourseMapper;
 import cn.com.chinahitech.bjmarket.course.Mapper.CourserankMapper;
 import cn.com.chinahitech.bjmarket.course.entity.Course;
@@ -14,8 +15,15 @@ public class CourserankService {
 
     @Autowired
     private CourserankMapper courseMapper;
+    @Autowired
+    private CourseKuMapper courseKuMapper;
 
-    public List<Course> getTopCoursesByCourseBankId(Integer cBankId, int limit) {
-        return courseMapper.findCoursesByBankId(cBankId, limit);
+
+    public int getCBankIdByCategory(String category) {
+        return courseKuMapper.findcbankidByCourseKuCategory(category);
+    }
+
+    public List<Course> getTopCoursesByCourseBankId(Integer cBankId) {
+        return courseMapper.findCoursesByBankId(cBankId);
     }
 }

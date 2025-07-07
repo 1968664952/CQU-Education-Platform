@@ -1,14 +1,13 @@
 package cn.com.chinahitech.bjmarket.exam.Controller;
 
 import cn.com.chinahitech.bjmarket.common.Result;
+import cn.com.chinahitech.bjmarket.exam.DTO.DeleteWrongCollectionRequest;
 import cn.com.chinahitech.bjmarket.exam.DTO.StudentDTO;
 import cn.com.chinahitech.bjmarket.exam.DTO.WrongCollectionDTO;
 import cn.com.chinahitech.bjmarket.exam.Service.WrongCollectionService;
+import cn.com.chinahitech.bjmarket.exam.Service.WrongCollectionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +41,18 @@ public class WrongCollectionController {
             }
         } catch (Exception e) {
             return Result.error("插入失败：" + e.getMessage());
+        }
+    }
+    @Autowired
+    private WrongCollectionServiceImpl wrongCollectionServiceImpl;
+
+    @DeleteMapping("/delete")
+    public Result<String> deleteWrongCollection(@RequestBody DeleteWrongCollectionRequest request) {
+        boolean success = wrongCollectionServiceImpl.removeWrongQuestion(request);
+        if (success) {
+            return Result.success("删除成功");
+        } else {
+            return Result.error("删除失败");
         }
     }
 }

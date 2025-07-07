@@ -361,8 +361,10 @@ public class CourseController {
     private CourserankService courserankService;
 
     @PostMapping("/rank")
-    public Result<List<Course>> getCourseRank(@RequestBody CourseRequestDTO dto) {
-        List<Course> courseList = courserankService.getTopCoursesByCourseBankId(dto.getCBankId(), dto.getLimit());
+    public Result<List<Course>> getCourseRank(@RequestBody coursekuDTO coursekudto) {
+        int dto= courserankService.getCBankIdByCategory(coursekudto.getCategory());
+
+        List<Course> courseList = courserankService.getTopCoursesByCourseBankId(dto);
         return Result.success(courseList);
 }
 }

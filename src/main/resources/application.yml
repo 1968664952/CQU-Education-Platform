@@ -6,6 +6,10 @@ spring:
     name: cqu_education
   aop:
     proxy-target-class: true
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

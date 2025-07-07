@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface CourseKuMapper extends BaseMapper<CourseKu> {
-    @Select("SELECT * FROM course_ku WHERE c_bank_id = #{cBankId}")
-    CourseKu findByCourseKuId(String cBankId);
+    @Select("SELECT c_bank_id FROM course_ku WHERE category = #{category}")
+    int findcbankidByCourseKuCategory(String category);
 }

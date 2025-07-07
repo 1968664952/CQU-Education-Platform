@@ -1,20 +1,29 @@
 package cn.com.chinahitech.bjmarket.config;
 
-import cn.com.chinahitech.bjmarket.interceptor.JwtInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import cn.com.chinahitech.bjmarket.interceptor.JwtRoleInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
+
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
-    @Autowired
-    private JwtInterceptor jwtInterceptor;
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/api/**") // 需要拦截的路径
-                .excludePathPatterns("/api/login", "/api/register"); // 放行的路径
+        registry.addInterceptor(new JwtRoleInterceptor("admin"))
+                .addPathPatterns("/admin/admin");
+
+        registry.addInterceptor(new JwtRoleInterceptor("user"))
+                .addPathPatterns("/user/admin");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*") // 生产环境应限制来源
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(false);
     }
 }

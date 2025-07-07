@@ -1,5 +1,6 @@
 package cn.com.chinahitech.bjmarket.exam.Service;
 
+import cn.com.chinahitech.bjmarket.exam.DTO.TestPaperWithBank;
 import cn.com.chinahitech.bjmarket.exam.DTO.WrongCollectionDTO;
 import cn.com.chinahitech.bjmarket.exam.DTO.WrongQuestionRef;
 import cn.com.chinahitech.bjmarket.exam.Entity.*;
@@ -48,7 +49,7 @@ public class WrongCollectionService {
         for (WrongQuestionRef ref : refs) {
             Integer paperId = ref.getPaperId();
             Integer questionId = ref.getQuestionId();
-            String category = ref.getCategory(); // e.g., "shortanswer"
+            String category = ref.getCategory();
             Timestamp createTime = ref.getCreateTime();
 
             Map<String, Object> questionMap = null;
@@ -71,13 +72,38 @@ public class WrongCollectionService {
                     if (sa != null) questionMap = convertToMap(sa);
                     break;
                 default:
-                    continue; // 不合法的类型跳过
+                    continue;
             }
 
             if (questionMap != null) {
                 questionMap.put("createdAt", createTime);
 
-                // ✅ 正确获取 Map 中的 key，避免大小写 mismatch
+                // 查询试卷信息
+                TestPaperWithBank paperInfo = wrongCollectionMapper.selectPaperWithBankInfo(paperId);
+                if (paperInfo != null) {
+                    questionMap.put("paperTitle", paperInfo.getTitle());
+                    questionMap.put("qBankName", paperInfo.getQBankName());
+                    questionMap.put("qBankCategory", paperInfo.getQBankCategory());
+                    questionMap.put("qBankDescription", paperInfo.getQBankDescription());
+                }
+
+                // ✅ 插入错题详细信息
+                WrongQuestionDetail detail = new WrongQuestionDetail();
+                detail.setStudentId(studentId);
+                detail.setPaperId(paperId);
+                detail.setQuestionId(questionId);
+                detail.setCategory(category);
+                detail.setCreateTime(createTime);
+
+                if (paperInfo != null) {
+                    detail.setPaperTitle(paperInfo.getTitle());
+                    detail.setQBankName(paperInfo.getQBankName());
+                    detail.setQBankCategory(paperInfo.getQBankCategory());
+                    detail.setQBankDescription(paperInfo.getQBankDescription());
+                }
+
+
+
                 String key = mapCategoryKey(category);
                 result.get(key).add(questionMap);
             }
@@ -85,6 +111,8 @@ public class WrongCollectionService {
 
         return result;
     }
+
+
 
     /**
      * 将题目对象转为 Map<String, Object>
