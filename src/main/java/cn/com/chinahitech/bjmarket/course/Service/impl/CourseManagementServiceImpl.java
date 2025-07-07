@@ -7,6 +7,7 @@ import cn.com.chinahitech.bjmarket.course.entity.Course;
 import cn.com.chinahitech.bjmarket.course.entity.DailyCourseUpload;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,10 @@ public class CourseManagementServiceImpl implements CourseManagementService {
 
     @Override
     public int addCourse(Course course) {
+        if (StringUtils.isBlank(course.getCoverUrl())) {
+            course.setCoverUrl("image/cover/cover.png");
+        }
+
         return courseManagementMapper.insertCourse(course);
     }
 
