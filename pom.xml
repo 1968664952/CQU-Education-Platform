@@ -107,12 +107,12 @@
             <version>4.3.0</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv-platform</artifactId>
             <version>1.5.8</version>
         </dependency>
-
 
 
         <!-- JJWT 最新版本 -->
