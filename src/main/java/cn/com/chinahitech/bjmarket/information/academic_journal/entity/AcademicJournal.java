@@ -70,4 +70,5 @@ public class AcademicJournal implements Serializable {
     private Integer viewCount;
 
 
+
 }

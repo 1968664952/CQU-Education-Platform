@@ -1,5 +1,6 @@
 package cn.com.chinahitech.bjmarket.login.controller;
 import cn.com.chinahitech.bjmarket.login.DTO.LoginRequest;
+import cn.com.chinahitech.bjmarket.login.Service.DailyVisitsService;
 import cn.com.chinahitech.bjmarket.login.Service.StudentService;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.login.entity.Student;
@@ -19,6 +20,8 @@ public class AuthController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private DailyVisitsService dailyVisitsService;
 
     @PostMapping("/login")
     public Result<?> login(HttpServletRequest request,
@@ -46,15 +49,13 @@ public class AuthController {
             session.setAttribute("grade",student.getGrade());
             //这样就完成了用户名和密码保存到session的操作
 
+            dailyVisitsService.addDailyVisit();   //插入每日访问
+
 
             return Result.success(data);
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }
-    }
-    @RequestMapping(value="/sayHi")
-    public String sayHi(){
-        return "Hello World!";
     }
 }
 
