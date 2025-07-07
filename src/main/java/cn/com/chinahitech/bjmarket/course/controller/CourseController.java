@@ -121,7 +121,10 @@ public class CourseController {
         if (size<10){
             try {
                 courseList0=courseService.personalRecom2(cBankId,grade);
-                courseList.addAll(courseList0);
+                courseList = Stream.concat(courseList.stream(), courseList0.stream())
+                        .limit(10)
+                        .distinct() // 基于Course的equals方法去重，需要正确实现equals/hashCode
+                        .collect(Collectors.toList());
                 size=courseList.size();
                 if (size>10){
                     courseList.subList(10, courseList.size()).clear();
