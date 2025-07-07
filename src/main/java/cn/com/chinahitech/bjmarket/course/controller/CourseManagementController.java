@@ -1,6 +1,5 @@
 package cn.com.chinahitech.bjmarket.course.controller;
 import cn.com.chinahitech.bjmarket.common.Result;
-import cn.com.chinahitech.bjmarket.course.DTO.deleteCourseDTO;
 import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.Service.CourseManagementService;
 import cn.com.chinahitech.bjmarket.course.Service.DailyCourseUploadService;
@@ -96,7 +95,7 @@ public class CourseManagementController {
     }
 
     @DeleteMapping("/deleteCourse")
-    public Result<String> deleteCourse(@RequestBody deleteCourseDTO course) {
+    public Result<String> deleteCourse(@RequestBody Course course) {
         int result = courseManagementService.deleteCourse(course.getCourseId());
         return result > 0 ? Result.success("删除成功") : Result.error("删除失败");
     }
