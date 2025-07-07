@@ -81,5 +81,7 @@ public class CompetitionMessage implements Serializable {
      */
     private Integer viewCount;
 
+    private  String participants;
+
 
 }

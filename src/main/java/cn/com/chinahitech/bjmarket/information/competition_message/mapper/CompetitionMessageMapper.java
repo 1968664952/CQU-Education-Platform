@@ -18,13 +18,13 @@ import java.util.List;
  */
 @Mapper
 public interface CompetitionMessageMapper extends BaseMapper<CompetitionMessage> {
-    @Insert("insert into competition_message(title,content,organizer,category,signup_open,signup_end,competition_date,signup_link,attachment_link,view_count)"+
-            "values(#{title},#{content},#{organizer},#{category},#{signupOpen},#{signupEnd},#{competitionDate},#{signupLink},#{attachmentLink},#{viewCount})")
+    @Insert("insert into competition_message(title,content,organizer,category,signup_open,signup_end,competition_date,signup_link,attachment_link,view_count,participants)"+
+            "values(#{title},#{content},#{organizer},#{category},#{signupOpen},#{signupEnd},#{competitionDate},#{signupLink},#{attachmentLink},#{viewCount}),#{participants}")
     void add(CompetitionMessage new1);
 
     List<CompetitionMessage> showlist(String title, String organizer);
 
-    @Update("update competition_message set title=#{title},content=#{content},organizer=#{organizer},category=#{category},signup_open=#{signupOpen},signup_end=#{signupEnd},competition_date=#{competitionDate},signup_link=#{signupLink},attachment_link=#{attachmentLink} " +
+    @Update("update competition_message set title=#{title},content=#{content},organizer=#{organizer},category=#{category},signup_open=#{signupOpen},signup_end=#{signupEnd},competition_date=#{competitionDate},signup_link=#{signupLink},attachment_link=#{attachmentLink},participants=#{participants}" +
             "where competition_id=#{competitionId}")
     void toupdate(CompetitionMessage cm);
 
