@@ -20,9 +20,9 @@ public class WrongCollectionController {
     @Autowired
     private WrongCollectionService wrongCollectionService;
     @PostMapping("/get")
-    public Result<Map<String, List<Object>>> getWrongByStudentId(@RequestBody StudentDTO student) {
+    public Result<Map<String, List<Map<String, Object>>>> getWrongByStudentId(@RequestBody StudentDTO student) {
         try {
-            Map<String, List<Object>> result = wrongCollectionService.getWrongQuestionsByStudentId(student.getStudentId());
+            Map<String, List<Map<String, Object>>> result = wrongCollectionService.getWrongQuestionsByStudentId(student.getStudentId());
             if (result == null || result.values().stream().allMatch(List::isEmpty)) {
                 return Result.error("该学生暂无错题记录");
             }

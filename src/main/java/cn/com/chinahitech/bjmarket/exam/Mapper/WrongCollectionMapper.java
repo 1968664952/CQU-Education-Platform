@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface WrongCollectionMapper {
 
-    @Select("SELECT paper_id, question_id, category FROM wrong_collection WHERE student_id = #{studentId}")
+    @Select("SELECT paper_id, question_id, category,create_time FROM wrong_collection WHERE student_id = #{studentId}")
     List<WrongQuestionRef> getWrongQuestionRefsByStudentId(@Param("studentId") Integer studentId);
     @Select("SELECT COUNT(*) FROM wrong_collection WHERE category = #{category} AND question_id = #{questionId} AND paper_id = #{paperId}")
     int countSameWrong(@Param("category") String category,
