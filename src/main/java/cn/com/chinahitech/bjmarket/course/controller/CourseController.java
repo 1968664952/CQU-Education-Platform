@@ -18,8 +18,6 @@ import java.util.stream.Stream;
 @RequestMapping("/course")
 public class CourseController {
     @Autowired
-    HttpServletRequest request;
-    @Autowired
     private CourseService courseService;
     @Autowired
     private CourseKuService courseKuService;
