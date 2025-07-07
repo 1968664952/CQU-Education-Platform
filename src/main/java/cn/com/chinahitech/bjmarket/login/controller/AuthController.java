@@ -24,8 +24,7 @@ public class AuthController {
     private DailyVisitsService dailyVisitsService;
 
     @PostMapping("/login")
-    public Result<?> login(HttpServletRequest request,
-                           @RequestBody LoginRequest loginRequest) {
+    public Result<?> login(@RequestBody LoginRequest loginRequest) {
         String studentId = loginRequest.getStudentId();
         String password = loginRequest.getPassword();
 
@@ -41,13 +40,14 @@ public class AuthController {
             data.put("grade", student.getGrade());
             data.put("majorName", student.getMajorName());
             data.put("studentId", student.getStudentId());
-            //第一步：获取session
-            HttpSession session = request.getSession();
-            //第二步：将想要保存到数据存入session中
-            session.setAttribute("studentId",studentId);
-            session.setAttribute("majorName",student.getMajorName());
-            session.setAttribute("grade",student.getGrade());
-            //这样就完成了用户名和密码保存到session的操作
+
+//            //第一步：获取session
+//            HttpSession session = request.getSession();
+//            //第二步：将想要保存到数据存入session中
+//            session.setAttribute("studentId",studentId);
+//            session.setAttribute("majorName",student.getMajorName());
+//            session.setAttribute("grade",student.getGrade());
+//            //这样就完成了用户名和密码保存到session的操作
 
             dailyVisitsService.addDailyVisit();   //插入每日访问
 

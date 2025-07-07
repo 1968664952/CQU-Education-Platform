@@ -51,7 +51,7 @@ public class AdministratorController {
 
     @GetMapping("/getDailyVisit")
     public String getDailyVisit() {
-        DailyVisits dailyVisits = new DailyVisits();
+        List<DailyVisits> dailyVisits = null;
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             dailyVisits = dailyVisitsService.getDailyVisit();
@@ -61,7 +61,7 @@ public class AdministratorController {
                 result.put("data", dailyVisits);
             } else {
                 result.put("status", "500");
-                result.put("msg", "当日没有访问");
+                result.put("msg", "没有访问记录");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

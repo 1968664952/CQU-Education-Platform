@@ -1,10 +1,7 @@
 package cn.com.chinahitech.bjmarket.course.controller;
 
 import cn.com.chinahitech.bjmarket.common.Result;
-import cn.com.chinahitech.bjmarket.course.DTO.CID;
-import cn.com.chinahitech.bjmarket.course.DTO.CourseLibrary;
-import cn.com.chinahitech.bjmarket.course.DTO.CourseRequestDTO;
-import cn.com.chinahitech.bjmarket.course.DTO.Keyword;
+import cn.com.chinahitech.bjmarket.course.DTO.*;
 import cn.com.chinahitech.bjmarket.course.Service.*;
 import cn.com.chinahitech.bjmarket.course.entity.*;
 import com.alibaba.fastjson.JSON;
@@ -73,82 +70,111 @@ public class CourseController {
         return JSON.toJSONString(result);
     }
 
-    @RequestMapping(value="/personalRecom",method = RequestMethod.GET)
-    public String personalRecom(){
-        List<Course> courseList =null;
-        List<Course> courseList0 =null;
-        List<CourseScores> courseScoresList=null;
-        Map<String,Object> result =new HashMap<String,Object>();
-        int grade=(int)request.getSession().getAttribute("grade");
-        int cBankId=0;
+    @RequestMapping(value = "/personalRecom", method = RequestMethod.POST)
+    public String personalRecom(@RequestBody Recom recom) {
+        List<Course> courseList = new ArrayList<>(); // 初始化为空列表
+        List<Course> courseList0 = new ArrayList<>();
+        List<CourseScores> courseScoresList = null;
+        Map<String, Object> result = new HashMap<>();
+
+        // 检查年级是否存在
+        int grade = recom.getGrade();
+        if (grade == 0) {
+            result.put("status", "500");
+            result.put("msg", "未获取到年级信息");
+            return JSON.toJSONString(result);
+        }
+
+        // 获取专业ID
+        String major = recom.getMajorName();
+        if (major == null) {
+            result.put("status", "500");
+            result.put("msg", "未获取到专业信息");
+            return JSON.toJSONString(result);
+        }
+
+        Integer cBankId;
         try {
-            String major=(String) request.getSession().getAttribute("majorName");
-            cBankId=courseKuService.queryIdBymajor(major);
+            cBankId = courseKuService.queryIdBymajor(major);
         } catch (Exception ex) {
             ex.printStackTrace();
-            result.put("status","501");
-            result.put("msg","异常："+ex.getMessage());
+            result.put("status", "501");
+            result.put("msg", "获取专业ID异常：" + ex.getMessage());
+            return JSON.toJSONString(result);
         }
-        if(grade==4) {
+
+        // grade == 4 时查询专业核心课程
+        if (grade == 4) {
             try {
-                courseList = courseService.queryPGCourse();
+                List<Course> pgCourses = courseService.queryPGCourse();
+                courseList = pgCourses != null ? pgCourses : new ArrayList<>(); // 确保非 null
             } catch (Exception ex) {
                 ex.printStackTrace();
-                result.put("status","501");
-                result.put("msg","异常："+ex.getMessage());
+                result.put("status", "501");
+                result.put("msg", "获取升学考研课程异常：" + ex.getMessage());
+                return JSON.toJSONString(result);
             }
         }
 
-        String studentId=(String) request.getSession().getAttribute("studentId");
-        try{
-            courseScoresList=courseScoreService.queryLearnedCourse(studentId);
+        // 检查学生ID是否存在
+        String studentId = recom.getStudentId();
+        if (studentId == null) {
+            result.put("status", "500");
+            result.put("msg", "未获取到学生ID");
+            return JSON.toJSONString(result);
+        }
+
+        // 查询已学课程
+        try {
+            courseScoresList = courseScoreService.queryLearnedCourse(studentId);
+            if (courseScoresList == null) {
+                courseScoresList = new ArrayList<>(); // 避免 null
+            }
             List<String> courseNames = courseScoresList.stream()
                     .map(CourseScores::getCourseName)
                     .collect(Collectors.toList());
-            courseList0=courseService.personalRecom1(courseNames,cBankId,grade);
-            courseList.addAll(courseList0);
-            if (courseList.size()>10){
-                courseList.subList(10, courseList.size()).clear();
-            }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            result.put("status","501");
-            result.put("msg","异常："+ex.getMessage());
-        }
+            // 获取推荐课程（处理 personalRecom1 可能返回 null）
+            courseList0 = courseService.personalRecom1(courseNames, cBankId, grade);
+            courseList0 = courseList0 != null ? courseList0 : new ArrayList<>();
 
-        int size=courseList.size();
-        if (size<10){
-            try {
-                courseList0=courseService.personalRecom2(cBankId,grade);
+            // 合并流并去重、限制数量
+            courseList = Stream.concat(courseList.stream(), courseList0.stream())
+                    .limit(10)
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            int size=courseList.size();
+            if (size<10) {
+                courseList0 = courseService.personalRecom2(cBankId, grade);
                 courseList = Stream.concat(courseList.stream(), courseList0.stream())
                         .limit(10)
                         .distinct() // 基于Course的equals方法去重，需要正确实现equals/hashCode
                         .collect(Collectors.toList());
-                size=courseList.size();
-                if (size>10){
+                size = courseList.size();
+                if (size > 10) {
                     courseList.subList(10, courseList.size()).clear();
                     System.out.println(courseList.size());
-                }
-                else if (size<10){
-                    courseList0=courseService.personalRecom3(cBankId);
+                } else if (size < 10) {
+                    courseList0 = courseService.personalRecom3(cBankId);
                     courseList = Stream.concat(courseList.stream(), courseList0.stream())
                             .limit(10)
                             .distinct() // 基于Course的equals方法去重，需要正确实现equals/hashCode
                             .collect(Collectors.toList());
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                result.put("status","501");
-                result.put("msg","异常："+ex.getMessage());
             }
-        }else if (size>10){
-            courseList.subList(10, courseList.size()).clear();
-        }
-        result.put("status","200");
-        result.put("msg","检索成功！");
-        result.put("data",courseList);
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            result.put("status", "501");
+            result.put("msg", "推荐逻辑异常：" + ex.getMessage());
+            return JSON.toJSONString(result);
+        }
+
+        // 最终结果
+        result.put("status", "200");
+        result.put("msg", "检索成功！");
+        result.put("data", courseList);
 
         return JSON.toJSONString(result);
     }
@@ -213,7 +239,7 @@ public class CourseController {
         Map<String,Object> map =new HashMap<String,Object>();
         Favorite favorite=new Favorite();
         favorite.setCourseId(cid.getCourse_id());
-        favorite.setStudentId((String) request.getSession().getAttribute("studentId"));
+        favorite.setStudentId(cid.getStudentId());
         try{
             int result=favoriteService.addFavorite(favorite);
             int f=courseService.addFavoriteCount(cid.getCourse_id());
@@ -237,7 +263,7 @@ public class CourseController {
         List<Favorite> favoriteList =null;
         Map<String,Object> result =new HashMap<String,Object>();
         try{
-            favoriteList=favoriteService.queryFavoriteById(cid.getCourse_id(),(String) request.getSession().getAttribute("studentId"));
+            favoriteList=favoriteService.queryFavoriteById(cid.getCourse_id(),cid.getStudentId());
             if(favoriteList.size()==1){
                 result.put("status","200");
                 result.put("msg","已收藏");
@@ -257,7 +283,7 @@ public class CourseController {
     public String deleteFavorite(@RequestBody CID cid){
         Map<String,Object> map =new HashMap<String,Object>();
         try{
-            int result=favoriteService.deleteFavorite(cid.getCourse_id(),(String) request.getSession().getAttribute("studentId"));
+            int result=favoriteService.deleteFavorite(cid.getCourse_id(),cid.getStudentId());
             int f=courseService.delFavoriteCount(cid.getCourse_id());
             if(result==1&&f==1){
                 map.put("status","200");
@@ -281,7 +307,7 @@ public class CourseController {
 
     @PostMapping("/saveOrUpdateHistory")
     public String saveProgress(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
-        String studentId=(String)request.getSession().getAttribute("studentId");
+        String studentId=videoPlaybackHistory.getStudentId();
         int chapterId=videoPlaybackHistory.getChapterId();
         int position=videoPlaybackHistory.getPosition();
         int lastPosition=videoPlaybackHistory.getLastPosition();
@@ -306,7 +332,7 @@ public class CourseController {
 
     @PostMapping("/getLastPosition")
     public String getLastPosition(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
-        String studentId=(String)request.getSession().getAttribute("studentId");
+        String studentId=videoPlaybackHistory.getStudentId();
         int chapterId=videoPlaybackHistory.getChapterId();
         int position=videoPlaybackHistory.getPosition();
 

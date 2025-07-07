@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class DailyvisitsServiceImpl implements DailyVisitsService {
@@ -26,13 +27,15 @@ public class DailyvisitsServiceImpl implements DailyVisitsService {
     }
 
     @Override
-    public DailyVisits getDailyVisit() {
-        DailyVisits dailyVisits=new DailyVisits();
+    public List<DailyVisits> getDailyVisit() {
+        List<DailyVisits> dailyVisits=null;
         QueryWrapper<DailyVisits> wrapper=new QueryWrapper<DailyVisits>();
-        LocalDate today = LocalDate.now();
 
-        wrapper.eq("date",today);
-        dailyVisits=dailyVisitsMapper.selectOne(wrapper);
+        LocalDate oneWeekAgo = LocalDate.now().minusDays(7); // 7天前的日期
+        LocalDate today = LocalDate.now(); // 今天
+        wrapper.between("date", oneWeekAgo,today);
+
+        dailyVisits=dailyVisitsMapper.selectList(wrapper);
         return dailyVisits;
     }
 }
