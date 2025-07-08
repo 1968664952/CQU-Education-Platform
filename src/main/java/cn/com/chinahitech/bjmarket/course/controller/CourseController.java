@@ -209,7 +209,8 @@ public class CourseController {
         List<Chapter> chapterList =null;
         Map<String,Object> result =new HashMap<String,Object>();
         try{
-            chapterList=chapterService.queryChapterById(cid.getCourse_id());
+            String courseId=cid.getCourse_id();
+            chapterList=chapterService.queryChapterById(courseId);
             if(chapterList.size()>0){
                 result.put("status","200");
                 result.put("msg","检索成功！");
@@ -304,7 +305,7 @@ public class CourseController {
     private VideoPlaybackHistoryService videoPlaybackHistoryService;
 
     @PostMapping("/saveOrUpdateHistory")
-    public String saveProgress(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
+    public String saveOrUpdateHistory(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
         String studentId=videoPlaybackHistory.getStudentId();
         int chapterId=videoPlaybackHistory.getChapterId();
         int position=videoPlaybackHistory.getPosition();

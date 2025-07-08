@@ -33,7 +33,7 @@ public class TeachingActivitiesController {
     }
 
     @PostMapping("/detail")
-    public Result<TeachingActivities> list(@RequestBody MID id){
+    public Result<TeachingActivities> detail(@RequestBody MID id){
         TeachingActivities ta = teachingActivitiesService.findById(id);
         return Result.success(ta);
     }

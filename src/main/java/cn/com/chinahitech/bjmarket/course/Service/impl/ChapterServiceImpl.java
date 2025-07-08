@@ -1,10 +1,13 @@
 package cn.com.chinahitech.bjmarket.course.Service.impl;
 
+import cn.com.chinahitech.bjmarket.course.Mapper.CourseMapper;
 import cn.com.chinahitech.bjmarket.course.Service.ChapterService;
 import cn.com.chinahitech.bjmarket.course.entity.Chapter;
 import cn.com.chinahitech.bjmarket.course.Mapper.ChapterMapper;
+import cn.com.chinahitech.bjmarket.course.entity.Course;
 import cn.com.chinahitech.bjmarket.course.entity.Favorite;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Autowired
     private ChapterMapper chapterMapper;
+    @Autowired
+    private CourseMapper courseMapper;
 
 
     @Override
@@ -25,6 +30,12 @@ public class ChapterServiceImpl implements ChapterService {
         wrapper.eq("course_id",CourseId);
 
         chapterList=chapterMapper.selectList(wrapper);
+
+        // 2. 更新total_play_count（无论是否存在章节，只要course_id存在则更新）
+        UpdateWrapper<Course> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("course_id", CourseId) // 匹配course_id
+                .setSql("total_play_count = total_play_count + 1"); // 播放次数+1
+        courseMapper.update(null, updateWrapper);
 
         return chapterList;
     }
