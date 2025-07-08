@@ -33,7 +33,7 @@ public class GeeMessageController {
     }
 
     @PostMapping("/detail")
-    public Result<GeeMessage> list(@RequestBody MID id){
+    public Result<GeeMessage> detail(@RequestBody MID id){
         GeeMessage cm = geeMessageService.findById(id);
         if(cm!=null) {
             return Result.success(cm);
