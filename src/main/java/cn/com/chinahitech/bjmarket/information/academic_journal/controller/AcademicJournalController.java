@@ -33,7 +33,7 @@ public class AcademicJournalController {
     }
 
     @PostMapping("/detail")
-    public Result<AcademicJournal> list(@RequestBody MID id){
+    public Result<AcademicJournal> detail(@RequestBody MID id){
         AcademicJournal aj = academicJournalService.findById(id);
         if(aj!=null) {
             return Result.success(aj);
