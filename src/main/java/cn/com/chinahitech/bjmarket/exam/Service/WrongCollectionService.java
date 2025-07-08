@@ -146,7 +146,7 @@ public class WrongCollectionService {
         }
     }
     public String addWrong(WrongCollectionDTO dto) {
-        int count = mapper.countSameWrong(dto.getCategory(), dto.getQuestionId(), dto.getPaperId());
+        int count = mapper.countSameWrong(dto.getCategory(), dto.getQuestionId(), dto.getPaperId(), dto.getStudentId());
         if (count > 0) {
             return "该类型的题目已经存在错题记录";
         }

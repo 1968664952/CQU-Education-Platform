@@ -14,10 +14,12 @@ public interface WrongCollectionMapper {
 
     @Select("SELECT paper_id, question_id, category,create_time FROM wrong_collection WHERE student_id = #{studentId}")
     List<WrongQuestionRef> getWrongQuestionRefsByStudentId(@Param("studentId") Integer studentId);
-    @Select("SELECT COUNT(*) FROM wrong_collection WHERE category = #{category} AND question_id = #{questionId} AND paper_id = #{paperId}")
+    @Select("SELECT COUNT(*) FROM wrong_collection WHERE category = #{category} AND question_id = #{questionId} AND paper_id = #{paperId} AND student_id = #{studentId}")
     int countSameWrong(@Param("category") String category,
                        @Param("questionId") int questionId,
-                       @Param("paperId") int paperId);
+                       @Param("paperId") int paperId,
+                       @Param("studentId") String studentId);
+
 
     @Insert("INSERT INTO wrong_collection(category, student_id, question_id, paper_id,create_time) " +
             "VALUES(#{category}, #{studentId}, #{questionId}, #{paperId}, #{createTime})")

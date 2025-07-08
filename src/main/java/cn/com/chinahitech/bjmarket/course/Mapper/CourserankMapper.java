@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface CourserankMapper {
 
-    @Select("SELECT * FROM course WHERE c_bank_id = #{cBankId} ORDER BY total_play_count  ")
+    @Select("SELECT * FROM course WHERE c_bank_id = #{cBankId} ORDER BY total_play_count desc limit 5 ")
     List<Course> findCoursesByBankId(@Param("cBankId") Integer cBankId);
 }

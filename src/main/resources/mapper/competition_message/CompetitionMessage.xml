@@ -14,8 +14,7 @@
         competition_date,
         signup_link,
         attachment_link,
-        view_count,
-        participants
+        view_count
         from competition_message
         <where>
             <if test="title != null">

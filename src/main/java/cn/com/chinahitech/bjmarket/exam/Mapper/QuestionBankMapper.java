@@ -22,7 +22,7 @@ public interface QuestionBankMapper {
     List<QuestionBank> findAllOrderByCreatedTime();
 
     // 使用全文搜索查找题库名称或描述中包含关键词的记录（需使用 MATCH...AGAINST）
-    @Select("SELECT * FROM question_bank WHERE q_bank_name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%')")
+    @Select("SELECT * FROM question_bank WHERE q_bank_name LIKE CONCAT('%', #{keyword}, '%') OR description LIKE CONCAT('%', #{keyword}, '%') ORDER BY q_bank_id")
 
 
 
