@@ -304,7 +304,7 @@ public class CourseController {
     private VideoPlaybackHistoryService videoPlaybackHistoryService;
 
     @PostMapping("/saveOrUpdateHistory")
-    public String saveProgress(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
+    public String saveOrUpdateHistory(@RequestBody VideoPlaybackHistory videoPlaybackHistory) {
         String studentId=videoPlaybackHistory.getStudentId();
         int chapterId=videoPlaybackHistory.getChapterId();
         int position=videoPlaybackHistory.getPosition();
