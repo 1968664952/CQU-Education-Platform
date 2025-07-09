@@ -12,19 +12,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtRoleInterceptor("admin"))
-                .addPathPatterns("/admin/**")           // 拦截所有 /admin 路径
+                .addPathPatterns("/admin/admin")           // 拦截所有 /admin 路径
                 .excludePathPatterns("/admin/login");   // 放行登录接口
 
 
         // 用户拦截器配置
         registry.addInterceptor(new JwtRoleInterceptor("user"))
                 .addPathPatterns(
-                        "/wrongCollection/**",
-                        "/video/**",
-                        "/personal_feild/**",
-                        "/information/**",
-                        "/exam/**",
-                        "/course/**"
+                        "/wrongCollection/admin"
+
                 )                 // 拦截根路径下的一层路径
                 .excludePathPatterns( "/api/login");
     }

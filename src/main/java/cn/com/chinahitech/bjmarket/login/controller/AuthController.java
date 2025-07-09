@@ -6,10 +6,11 @@ import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.login.entity.Student;
 import cn.com.chinahitech.bjmarket.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/api")
 public class AuthController {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private StudentService studentService;
@@ -28,10 +31,25 @@ public class AuthController {
         String studentId = loginRequest.getStudentId();
         String password = loginRequest.getPassword();
 
-        try {
-            Student student = studentService.login(studentId, password);
-            String token = JwtUtils.generateToken(student.getStudentId(),"user");
+        // Redis 锁定与失败计数键
+        String failKey = "login_fail:" + studentId;
+        String lockKey = "login_lock:" + studentId;
 
+        // 判断是否已被锁定
+        if (Boolean.TRUE.equals(redisTemplate.hasKey(lockKey))) {
+            return Result.error("登录失败次数过多，请10分钟后再试");
+        }
+
+        try {
+            // 尝试登录
+            Student student = studentService.login(studentId, password);
+            String token = JwtUtils.generateToken(student.getStudentId(), "user");
+
+            // 登录成功，清除失败记录
+            redisTemplate.delete(failKey);
+            redisTemplate.delete(lockKey);
+
+            // 构建返回数据
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
             data.put("realName", student.getRealName());
@@ -41,21 +59,21 @@ public class AuthController {
             data.put("majorName", student.getMajorName());
             data.put("studentId", student.getStudentId());
 
-//            //第一步：获取session
-//            HttpSession session = request.getSession();
-//            //第二步：将想要保存到数据存入session中
-//            session.setAttribute("studentId",studentId);
-//            session.setAttribute("majorName",student.getMajorName());
-//            session.setAttribute("grade",student.getGrade());
-//            //这样就完成了用户名和密码保存到session的操作
-
-            dailyVisitsService.addDailyVisit();   //插入每日访问
-
+            dailyVisitsService.addDailyVisit();   // 插入每日访问记录
 
             return Result.success(data);
         } catch (Exception e) {
-            return Result.error(e.getMessage());
+            // 登录失败，增加失败次数
+            Long failCount = redisTemplate.opsForValue().increment(failKey);
+            redisTemplate.expire(failKey, Duration.ofMinutes(2)); // 2分钟内有效
+
+            if (failCount >= 5) {
+                redisTemplate.opsForValue().set(lockKey, "LOCKED", Duration.ofMinutes(10)); // 锁定10分钟
+                return Result.error("失败超过5次，账号已锁定10分钟");
+            }
+
+            return Result.error("用户名或密码错误（剩余尝试次数：" + (5 - failCount) + "）");
         }
-    }
-}
+    }}
+
 
