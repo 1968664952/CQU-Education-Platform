@@ -101,11 +101,18 @@ public class CourseController {
             return JSON.toJSONString(result);
         }
 
-        // grade == 4 时查询专业核心课程
-        if (grade == 4) {
+        // grade == 4 时查询职业实战课程
+        if (grade == 4||grade==3) {
             try {
-                List<Course> pgCourses = courseService.queryPGCourse();
-                courseList = pgCourses != null ? pgCourses : new ArrayList<>(); // 确保非 null
+                List<Course> msCourses = courseService.queryMSCourse();
+                List<Course> jlCourses = courseService.queryJLCourse();
+                courseList = Stream.concat(msCourses.stream(), jlCourses.stream())
+                        .limit(10)
+                        .sorted(Comparator.comparingDouble((Course c) -> c.getCompositeScore() == null ? -1 : c.getCompositeScore())
+                                .reversed()
+                                .thenComparing(Course::getTotalPlayCount, Comparator.reverseOrder()))  // 次级排序：按播放量升序
+                        .distinct()
+                        .collect(Collectors.toList());
             } catch (Exception ex) {
                 ex.printStackTrace();
                 result.put("status", "501");
@@ -177,12 +184,34 @@ public class CourseController {
         return JSON.toJSONString(result);
     }
 
-    @RequestMapping(value="/queryPGCourse",method = RequestMethod.GET)
-    public String queryPGCourse(){
+    @RequestMapping(value="/queryMSCourse",method = RequestMethod.GET)
+    public String queryMSCourse(){
         List<Course> courseList =null;
         Map<String,Object> result =new HashMap<String,Object>();
         try{
-            courseList=courseService.queryPGCourse();
+            courseList=courseService.queryMSCourse();
+            if(courseList.size()>0){
+                result.put("status","200");
+                result.put("msg","检索成功！");
+                result.put("data",courseList);
+            }else {
+                result.put("status","500");
+                result.put("msg","该课程不存在");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            result.put("status","501");
+            result.put("msg","异常："+ex.getMessage());
+        }
+        return JSON.toJSONString(result);
+    }
+
+    @RequestMapping(value="/queryJLCourse",method = RequestMethod.GET)
+    public String queryJLCourse(){
+        List<Course> courseList =null;
+        Map<String,Object> result =new HashMap<String,Object>();
+        try{
+            courseList=courseService.queryJLCourse();
             if(courseList.size()>0){
                 result.put("status","200");
                 result.put("msg","检索成功！");

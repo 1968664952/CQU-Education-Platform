@@ -2,6 +2,7 @@ package cn.com.chinahitech.bjmarket.course.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Setter;
 
@@ -20,8 +21,8 @@ public class Course {
     private String coverUrl;           // 封面图URL
     private String description;        // 课程描述
     private Integer difficulty;        // 难度级别（1-5，1最简单）
-    private Timestamp createdAt;       // 创建时间
-    private Timestamp updatedAt;       // 更新时间
+    private String createdAt;       // 创建时间
+    private String updatedAt;       // 更新时间
     private Long totalPlayCount;       // 总播放量
     private Integer favoriteCount;     // 收藏数
     private Float compositeScore;      // 综合得分

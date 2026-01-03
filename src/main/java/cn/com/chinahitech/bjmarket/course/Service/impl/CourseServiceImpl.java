@@ -67,11 +67,23 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public List<Course> queryPGCourse() {
+    public List<Course> queryMSCourse() {
         List<Course> courseList=null;
         QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
 
-        wrapper.eq("c_bank_id","16");
+        wrapper.eq("c_bank_id","17");
+
+        courseList=courseMapper.selectList(wrapper);
+
+        return courseList;
+    }
+
+    @Override
+    public List<Course> queryJLCourse() {
+        List<Course> courseList=null;
+        QueryWrapper<Course> wrapper=new QueryWrapper<Course>();
+
+        wrapper.eq("c_bank_id","18");
 
         courseList=courseMapper.selectList(wrapper);
 
