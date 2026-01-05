@@ -42,6 +42,28 @@
         ORDER BY publish_date DESC
     </select>
 
+
+    <select id="show_recommend" resultMap="journalMap">
+        select
+        journal_id,
+        title,
+        content,
+        author,
+        publish_time,
+        publisher,
+        category,
+        publish_date,
+        attachment_link,
+        view_count
+        from academic_journal
+        <where>
+            <if test="category != null">
+                title like concat('%', #{title}, '%')
+            </if>
+        </where>
+        ORDER BY publish_date DESC
+    </select>
+
 <!--    &lt;!&ndash;动态sql&ndash;&gt;-->
 <!--    <select id="showlist" resultType="cn.com.chinahitech.bjmarket.academic_journal.entity.AcademicJournal">-->
 <!--        select * from academic_journal-->

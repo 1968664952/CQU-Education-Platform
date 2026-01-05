@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/information/academic_journal")
+@RequestMapping("/information/industry")
 public class AcademicJournalController {
     @Autowired
     private AcademicJournalService academicJournalService;
@@ -29,6 +29,12 @@ public class AcademicJournalController {
     @PostMapping("/list")
     public Result<PageBean<AcademicJournal>> list(@RequestBody SearchTag searchTag){
         PageBean<AcademicJournal> pb = academicJournalService.getlist(searchTag);
+        return Result.success(pb);
+    }
+
+    @PostMapping("/recommend")
+    public Result<PageBean<AcademicJournal>> list(@RequestBody String category){
+        PageBean<AcademicJournal> pb = academicJournalService.get_recommend(category);
         return Result.success(pb);
     }
 
@@ -42,5 +48,8 @@ public class AcademicJournalController {
             return Result.error(null);
         }
     }
+
+
+
 
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/admin/academic_journal")
+@RequestMapping("/admin/industry")
 public class AdminAcademicJournalController {
     @Autowired
     private AcademicJournalService academicJournalService;
@@ -41,6 +41,7 @@ public class AdminAcademicJournalController {
         PageBean<AcademicJournal> pb = academicJournalService.getlist(searchTag);
         return Result.success(pb);
     }
+
 
     @PostMapping("/detail")
     public Result<AcademicJournal> detail(@RequestBody MID id){

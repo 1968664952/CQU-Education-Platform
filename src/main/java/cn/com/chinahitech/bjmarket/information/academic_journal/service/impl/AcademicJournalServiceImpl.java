@@ -55,6 +55,24 @@ public class AcademicJournalServiceImpl extends ServiceImpl<AcademicJournalMappe
     }
 
     @Override
+    public PageBean<AcademicJournal> get_recommend(String category){
+        //创建pb
+        PageBean<AcademicJournal> pb = new PageBean<>();
+        //开始分页查询Pagehelper
+        PageHelper.startPage(1,4);
+        //调用mapper
+        List<AcademicJournal> as = academicJournalMapper.show_recommend(category);
+        //page中提供了方法，可以回去Pagehelper分页查询后，得到的总记录和当前页数据
+        Page<AcademicJournal> p=(Page<AcademicJournal>) as;
+
+        //把数据填会pb
+        pb.setTotal((int)p.getTotal());
+        pb.setProducts(p.getResult());
+        return pb;
+    };
+
+
+    @Override
     public int toupdate(AcademicJournal journal){
         int res = academicJournalMapper.toupdate(journal);
         return res;

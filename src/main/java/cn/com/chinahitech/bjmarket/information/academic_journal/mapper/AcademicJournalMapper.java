@@ -23,6 +23,8 @@ public interface AcademicJournalMapper extends BaseMapper<AcademicJournal> {
 
     List<AcademicJournal> showlist(String title,String publisher);
 
+    List<AcademicJournal> show_recommend(String category);
+
     @Update("update academic_journal set title=#{title},content=#{content},author=#{author},publisher=#{publisher},category=#{category},attachment_link=#{attachmentLink} " +
             "where journal_id=#{journalId}")
     int toupdate(AcademicJournal journal);

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/information/competition_message")
+@RequestMapping("/information/job")
 public class CompetitionMessageController {
     @Autowired
     private CompetitionMessageService competitionMessageService;

@@ -28,4 +28,6 @@ public interface AcademicJournalService extends IService<AcademicJournal> {
     AcademicJournal findById(MID id);
     //
     AcademicJournal findByIdAdmin(MID id);
+
+    PageBean<AcademicJournal> get_recommend(String category);
 }
