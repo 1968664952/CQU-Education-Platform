@@ -58,7 +58,7 @@
         from academic_journal
         <where>
             <if test="category != null">
-                category concat('%', #{category}, '%')
+                category like concat('%', #{category}, '%')
             </if>
         </where>
         ORDER BY publish_date DESC
