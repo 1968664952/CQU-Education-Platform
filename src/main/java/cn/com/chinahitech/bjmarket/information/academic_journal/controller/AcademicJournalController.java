@@ -2,6 +2,7 @@ package cn.com.chinahitech.bjmarket.information.academic_journal.controller;
 
 
 import cn.com.chinahitech.bjmarket.information.academic_journal.entity.AcademicJournal;
+import cn.com.chinahitech.bjmarket.information.academic_journal.entity.Category_name;
 import cn.com.chinahitech.bjmarket.information.academic_journal.service.AcademicJournalService;
 import cn.com.chinahitech.bjmarket.common.Result;
 import cn.com.chinahitech.bjmarket.PageBean;
@@ -33,8 +34,8 @@ public class AcademicJournalController {
     }
 
     @PostMapping("/recommend")
-    public Result<PageBean<AcademicJournal>> list(@RequestBody String category){
-        PageBean<AcademicJournal> pb = academicJournalService.get_recommend(category);
+    public Result<PageBean<AcademicJournal>> list(@RequestBody Category_name category){
+        PageBean<AcademicJournal> pb = academicJournalService.get_recommend(category.getC_name());
         return Result.success(pb);
     }
 
